@@ -2,9 +2,9 @@ const DocsEngine = require('../support/docs')
 const commonOptions = require('../support/commonOptions')
 
 const data = {
-    name: null,
-    title: null,
-    description: null,
+    name: 'test',
+    title: 'This is a Test',
+    description: 'This is a longer description of Test',
     repo: 'my/repo',
 }
 
@@ -13,8 +13,8 @@ const handler = async ({ force, ...options }) => {
 
     await docs.initialize({
         data: {
-            ...answers,
-            sourcedir: source,
+            ...data,
+            basePath: options.dest,
         },
         force,
     })

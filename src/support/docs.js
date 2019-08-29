@@ -31,8 +31,6 @@ module.exports = ({ source, dest, getCache, changelog, changelogFile }) => {
     const sourceDir = path.resolve(source)
     const markdownDir = path.join(outDir, 'markdown')
 
-    console.log(changelog, changelogFile)
-
     const processOnChanged = async p => {
         const outPath =
             path.relative(process.cwd(), p) === changelogFile
