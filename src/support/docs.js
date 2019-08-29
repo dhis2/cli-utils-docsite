@@ -25,11 +25,12 @@ const processDocFile = async (srcPath, outPath) => {
 }
 
 const parsePackageRepository = repository => {
+    let repo
     if (!repository || typeof repository === 'string') {
-        return repository
+        repo = repository
+    } else {
+        repo = repository.url
     }
-
-    let repo = repository.url
 
     if (path.extname(repo) === '.git') {
         // TODO: support non-git repos?
