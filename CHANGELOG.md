@@ -1,3 +1,10 @@
+## [1.0.4](https://github.com/dhis2/cli-utils-docsite/compare/v1.0.3...v1.0.4) (2019-08-29)
+
+
+### Bug Fixes
+
+* upgrade @dhis2/cli-helpers-engine to catch HTTP errors ([9dc9514](https://github.com/dhis2/cli-utils-docsite/commit/9dc9514))
+
 ## [1.0.3](https://github.com/dhis2/cli-utils-docsite/compare/v1.0.2...v1.0.3) (2019-08-29)
 
 
