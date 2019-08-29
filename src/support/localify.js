@@ -11,11 +11,10 @@ module.exports.localify = async ({ filePath, assetsDir, cache, force }) => {
     fs.ensureDirSync(assetsDir)
     const matches = matchAll(content, regexp).toArray()
 
-    reporter.debug('Found external assets', matches)
+    reporter.debug(`Found ${matches.length} external assets`, matches)
 
     const usedNames = {}
 
-    reporter.info(`Found ${matches.length} esternal assets, downloading...`)
     await Promise.all(
         matches.map(async url => {
             const basename = path.basename(url)

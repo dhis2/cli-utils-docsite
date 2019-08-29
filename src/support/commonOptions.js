@@ -1,12 +1,18 @@
+const path = require('path')
+
+const resolvePath = p => path.resolve(p)
+
 module.exports = {
     source: {
         type: 'string',
+        coerce: resolvePath,
         default: 'docs',
     },
     dest: {
         alias: 'o',
         type: 'string',
-        default: 'www',
+        coerce: resolvePath,
+        default: 'dest',
     },
     force: {
         type: 'boolean',
@@ -19,5 +25,10 @@ module.exports = {
     changelogFile: {
         type: 'string',
         default: 'CHANGELOG.md',
+    },
+    configFile: {
+        type: 'string',
+        coerce: resolvePath,
+        default: 'd2.config.js',
     },
 }

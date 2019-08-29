@@ -19,50 +19,131 @@ const processDocFile = async (srcPath, outPath) => {
         // TODO: auto-generate the _sidebar from frontmatter
 
         await fs.writeFile(outPath, fm.body)
-        reporter.debug()
     } else {
         await fs.copyFile(srcPath, outPath)
     }
 }
 
-module.exports = ({ source, dest, getCache, changelog, changelogFile }) => {
+const parsePackageRepository = repository => {
+    if (!repository || typeof repository === 'string') {
+        return repository
+    }
+
+    let repo = repository.url
+
+    if (path.extname(repo) === '.git') {
+        // TODO: support non-git repos?
+        repo = repo.substr(0, repo.length - 4)
+    }
+
+    // TODO: Support non-root repository links (need to modify docsify)
+    // if (repository.directory) {
+    //     repo = path.join(repo, repository.directory)
+    // }
+
+    return repo
+}
+
+const loadData = ({ dataInput, configFile, packageJsonFile }) => {
+    let configData, packageData
+
+    reporter.debug('Manual template data', dataInput)
+
+    try {
+        const config = require(configFile)
+        configData = {
+            ...config,
+            ...config.docsite,
+        }
+        reporter.debug(`Template data loaded from config file ${configFile}`)
+    } catch (e) {
+        reporter.debug(`Failed to load config file ${configFile}`)
+    }
+
+    try {
+        const pkg = require(packageJsonFile)
+        packageData = {
+            name: pkg.name,
+            description: pkg.description,
+            version: pkg.version,
+            repo: parsePackageRepository(pkg.repository),
+            ...pkg.d2,
+            ...(pkg.d2 && pkg.d2.docsite),
+        }
+        reporter.debug(
+            `Template data loaded from package.json file ${packageJsonFile}`
+        )
+    } catch (e) {
+        reporter.debug(`Failed to load package.json file ${packageJsonFile}`, e)
+    }
+
+    const data = {
+        ...packageData,
+        ...configData,
+        ...dataInput,
+    }
+
+    if (!data.title) {
+        data.title = data.name
+    }
+
+    reporter.debug('Final template data', data)
+    return data
+}
+
+module.exports = ({
+    source,
+    dest,
+    data: dataInput,
+    configFile,
+    getCache,
+    changelog,
+    changelogFile,
+}) => {
     const cache = getCache()
-    const outDir = path.resolve(dest)
-    const sourceDir = path.resolve(source)
-    const markdownDir = path.join(outDir, 'markdown')
+    const markdownDir = path.join(dest, 'markdown')
+
+    const data = loadData({
+        dataInput,
+        configFile,
+        packageJsonFile: path.join(process.cwd(), 'package.json'),
+    })
+    data.sourcedir = data.sourcedir
+        ? path.join(data.sourcedir, path.relative(process.cwd(), source))
+        : path.relative(process.cwd(), source)
 
     const processOnChanged = async p => {
         const outPath =
             path.relative(process.cwd(), p) === changelogFile
                 ? path.join(markdownDir, path.relative(process.cwd(), p))
-                : path.join(markdownDir, path.relative(sourceDir, p))
+                : path.join(markdownDir, path.relative(source, p))
         await processDocFile(p, outPath)
     }
     const processOnDeleted = async p => {
         const outPath =
             path.relative(process.cwd(), p) === changelogFile
                 ? path.join(markdownDir, path.relative(process.cwd(), p))
-                : path.join(markdownDir, path.relative(sourceDir, p))
+                : path.join(markdownDir, path.relative(source, p))
         await fs.unlink(outPath)
     }
 
     return {
-        initialize: async ({ data, force }) => {
-            await fs.emptyDir(outDir)
+        initialize: async ({ force }) => {
+            await fs.emptyDir(dest)
 
-            await installTemplate(templateDir, outDir, data)
+            await installTemplate(templateDir, dest, data)
 
             await localify({
-                filePath: path.join(outDir, 'index.html'),
-                assetsDir: path.join(outDir, 'assets'),
+                filePath: path.join(dest, 'index.html'),
+                assetsDir: path.join(dest, 'assets'),
                 cache,
                 force,
             })
         },
 
         build: async () => {
-            if (fs.existsSync(sourceDir)) {
-                await walkDir(sourceDir, processOnChanged)
+            if (fs.existsSync(source)) {
+                await walkDir(source, processOnChanged)
             }
 
             if (changelog && fs.existsSync(changelogFile)) {
@@ -87,6 +168,8 @@ module.exports = ({ source, dest, getCache, changelog, changelogFile }) => {
             if (changelog) {
                 watcher.add(changelogFile)
             }
+
+            // TODO: Also watch config files
         },
     }
 }
