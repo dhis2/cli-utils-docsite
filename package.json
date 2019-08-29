@@ -10,7 +10,7 @@
     "private": false,
     "dependencies": {
         "@dhis2/cli-helpers-engine": "1.4.0",
-        "@dhis2/cli-helpers-template": "link:../helpers-template/",
+        "@dhis2/cli-helpers-template": "^1.0.1",
         "chokidar": "^3.0.2",
         "front-matter": "^3.0.2",
         "fs-extra": "^8.1.0",

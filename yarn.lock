@@ -167,9 +167,16 @@
     update-notifier "^3.0.0"
     yargs "^13.1.0"
 
-"@dhis2/cli-helpers-template@link:../helpers-template":
-  version "0.0.0"
-  uid ""
+"@dhis2/cli-helpers-template@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@dhis2/cli-helpers-template/-/cli-helpers-template-1.0.1.tgz#69c65fe496a509c0dd76349a1ed1d242c6f5d354"
+  integrity sha512-VBtRxlPNq1ecCrW+xKW7mqTicUtqiVf/m3SJ24kZq+27fZuMF6vToDOIpMAWiHt0Xa+ITEiTarouZrc51BOESA==
+  dependencies:
+    "@dhis2/cli-helpers-engine" "^1.4.1"
+    chalk "^2.4.2"
+    fs-extra "^8.1.0"
+    handlebars "^4.1.2"
+    isbinaryfile "^4.0.2"
 
 "@dhis2/cli-style@^4.1.1":
   version "4.1.1"
