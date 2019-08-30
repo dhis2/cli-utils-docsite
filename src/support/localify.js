@@ -29,11 +29,14 @@ module.exports.localify = async ({ filePath, assetsDir, cache, force }) => {
             usedNames[basename] = url
 
             const cachePath = path.join(cacheBase, basename)
+            const exists = await cache.exists(cachePath)
 
-            await cache.get(url, cachePath, {
-                raw: true,
-                force,
-            })
+            if (!exists) {
+                await cache.get(url, cachePath, {
+                    raw: true,
+                    force,
+                })
+            }
 
             const dest = path.join(assetsDir, basename)
             fs.copyFileSync(cache.getCacheLocation(cachePath), dest)
