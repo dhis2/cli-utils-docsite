@@ -1,12 +1,14 @@
 const { reporter } = require('@dhis2/cli-helpers-engine')
 const DocsEngine = require('../support/docs')
+const path = require('path')
 const commonOptions = require('../support/commonOptions')
 
 /**
  * @name build [source] [options]
  * @kind command
  * @description Build the docsite.
- * @param - Accepts all **Common Options** plus the following:
+ * @param {string} source=./docs - Path to documentation source files
+ * @param **options** - Accepts all **Common Options** plus the following:
  * @param {boolean} watch=false - If true, watch for changes
  * @example @lang sh
  * > d2 utils docsite build ./docs -o ./dist --jsdoc src/ --watch
@@ -33,6 +35,11 @@ module.exports = {
     desc: 'Build a production version of the documentation site',
     aliases: 'b',
     builder: {
+        source: {
+            type: 'string',
+            coerce: p => path.resolve(p),
+            default: 'docs',
+        },
         ...commonOptions,
         watch: {
             type: 'boolean',

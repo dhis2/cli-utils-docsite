@@ -1,5 +1,6 @@
 const liveServer = require('live-server')
 const chalk = require('chalk')
+const path = require('path')
 const { reporter } = require('@dhis2/cli-helpers-engine')
 const DocsEngine = require('../support/docs')
 const commonOptions = require('../support/commonOptions')
@@ -8,7 +9,8 @@ const commonOptions = require('../support/commonOptions')
  * @name serve [source] [options]
  * @kind command
  * @description Serve the docsite and watch for changes.
- * @param - Accepts all **Common Options** plus the following:
+ * @param {string} source=./docs - Path to documentation source files
+ * @param **options** - Accepts all **Common Options** plus the following:
  * @param {number} port=3000 - The port on which to serve the docsite
  * @param {boolean} open=true - If true, open the served docsite in a new browser window
  * @example @lang sh
@@ -45,6 +47,11 @@ module.exports = {
     desc: 'Serve documentation',
     aliases: 's',
     builder: {
+        source: {
+            type: 'string',
+            coerce: p => path.resolve(p),
+            default: 'docs',
+        },
         ...commonOptions,
         port: {
             type: 'number',
