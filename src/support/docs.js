@@ -2,8 +2,10 @@ const { reporter } = require('@dhis2/cli-helpers-engine')
 const { installTemplate, walkDir } = require('@dhis2/cli-helpers-template')
 const fs = require('fs-extra')
 const path = require('path')
+const chalk = require('chalk')
 const frontMatter = require('front-matter')
 const chokidar = require('chokidar')
+const JSDocEngine = require('../support/jsdoc')
 
 const { localify } = require('../support/localify')
 
@@ -100,9 +102,12 @@ module.exports = ({
     getCache,
     changelog,
     changelogFile,
+    jsdoc,
+    jsdocOutputFile,
 }) => {
     const cache = getCache()
     const markdownDir = path.join(dest, 'markdown')
+    const jsdocOut = path.join(markdownDir, jsdocOutputFile)
 
     const data = loadData({
         dataInput,
@@ -120,6 +125,11 @@ module.exports = ({
                 : path.join(markdownDir, path.relative(source, p))
         await processDocFile(p, outPath)
     }
+
+    const processJSDoc = async () => {
+        await JSDocEngine.render(jsdoc, jsdocOut)
+    }
+
     const processOnDeleted = async p => {
         const outPath =
             path.relative(process.cwd(), p) === changelogFile
@@ -153,13 +163,23 @@ module.exports = ({
                     path.join(markdownDir, 'CHANGELOG.md')
                 )
             }
+
+            if (jsdoc && jsdoc.length) {
+                processJSDoc()
+            }
         },
 
         watch: () => {
-            const watcher = chokidar
+            const docsWatcher = chokidar
                 .watch(`${source}/**`, {
                     ignoreInitial: true,
                 })
+                .on('all', (e, p) =>
+                    reporter.print(
+                        'Change detected!',
+                        chalk.dim(path.relative(process.cwd(), p))
+                    )
+                )
                 .on('addDir', p => fs.ensureDirSync(p))
                 .on('add', processOnChanged)
                 .on('change', processOnChanged)
@@ -167,8 +187,20 @@ module.exports = ({
                 .on('unlinkDir', processOnDeleted)
 
             if (changelog) {
-                watcher.add(changelogFile)
+                docsWatcher.add(changelogFile)
             }
+
+            chokidar
+                .watch(jsdoc, {
+                    ignoreInitial: true,
+                })
+                .on('all', async (e, p) => {
+                    reporter.print(
+                        'JSDoc change detected!',
+                        chalk.dim(path.relative(process.cwd(), p))
+                    )
+                    await processJSDoc()
+                })
 
             // TODO: Also watch config files
         },

@@ -1,22 +1,41 @@
 const liveServer = require('live-server')
+const chalk = require('chalk')
 const { reporter } = require('@dhis2/cli-helpers-engine')
 const DocsEngine = require('../support/docs')
 const commonOptions = require('../support/commonOptions')
 
+/**
+ * @name serve [source] [options]
+ * @kind command
+ * @description Serve the docsite and watch for changes.
+ * @param - Accepts all **Common Options** plus the following:
+ * @param {number} port=3000 - The port on which to serve the docsite
+ * @param {boolean} open=true - If true, open the served docsite in a new browser window
+ * @example @lang sh
+ * > d2 utils docsite serve ./docs -o ./dist --port 3001
+ */
 const handler = async ({ port, open, force, ...options }) => {
     reporter.debug('Options', options)
     const docs = DocsEngine(options)
 
+    reporter.info('Building...')
     await docs.initialize({ force })
     await docs.build()
 
-    docs.watch()
-    liveServer.start({
+    await liveServer.start({
         root: options.dest,
         wait: 300,
         port,
         open,
+        logLevel: 0,
     })
+    reporter.info(
+        chalk.green(
+            `Serving docsite at ${chalk.bold(`http://localhost:${port}`)}`
+        )
+    )
+    reporter.info('Watching for changes...')
+    docs.watch()
 }
 
 module.exports = {
