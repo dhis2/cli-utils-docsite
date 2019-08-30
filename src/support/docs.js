@@ -190,17 +190,19 @@ module.exports = ({
                 docsWatcher.add(changelogFile)
             }
 
-            chokidar
-                .watch(jsdoc, {
-                    ignoreInitial: true,
-                })
-                .on('all', async (e, p) => {
-                    reporter.print(
-                        'JSDoc change detected!',
-                        chalk.dim(path.relative(process.cwd(), p))
-                    )
-                    await processJSDoc()
-                })
+            if (jsdoc && jsdoc.length) {
+                chokidar
+                    .watch(jsdoc, {
+                        ignoreInitial: true,
+                    })
+                    .on('all', async (e, p) => {
+                        reporter.print(
+                            'JSDoc change detected!',
+                            chalk.dim(path.relative(process.cwd(), p))
+                        )
+                        await processJSDoc()
+                    })
+            }
 
             // TODO: Also watch config files
         },
