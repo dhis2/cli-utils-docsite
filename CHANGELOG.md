@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/dhis2/cli-utils-docsite/compare/v1.0.4...v1.1.0) (2019-08-30)
+
+
+### Features
+
+* add support for JSDoc ([#9](https://github.com/dhis2/cli-utils-docsite/issues/9)) ([0bf279f](https://github.com/dhis2/cli-utils-docsite/commit/0bf279f))
+
 ## [1.0.4](https://github.com/dhis2/cli-utils-docsite/compare/v1.0.3...v1.0.4) (2019-08-29)
 
 
