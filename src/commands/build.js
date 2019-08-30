@@ -15,14 +15,15 @@ const handler = async ({ force, watch, ...options }) => {
     reporter.debug('Options', options)
     const docs = DocsEngine(options)
 
+    reporter.info('Initializing docsite...')
     await docs.initialize({
         force,
     })
     reporter.info('Building...')
     await docs.build()
 
-    reporter.info('Watching for changes...')
     if (watch) {
+        reporter.info('Watching for changes...')
         docs.watch()
     }
 }

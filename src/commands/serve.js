@@ -18,8 +18,10 @@ const handler = async ({ port, open, force, ...options }) => {
     reporter.debug('Options', options)
     const docs = DocsEngine(options)
 
-    reporter.info('Building...')
+    reporter.info('Initializing docsite...')
     await docs.initialize({ force })
+
+    reporter.info('Building...')
     await docs.build()
 
     await liveServer.start({
