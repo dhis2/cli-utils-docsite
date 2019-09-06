@@ -165,7 +165,7 @@ module.exports = ({
             }
 
             if (jsdoc && jsdoc.length) {
-                processJSDoc()
+                await processJSDoc()
             }
         },
 
