@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/dhis2/cli-utils-docsite/compare/v1.1.0...v1.1.1) (2019-09-13)
+
+
+### Bug Fixes
+
+* set the cwd for chokidar when watching files ([#12](https://github.com/dhis2/cli-utils-docsite/issues/12)) ([ba7b8f4](https://github.com/dhis2/cli-utils-docsite/commit/ba7b8f4))
+
 # [1.1.0](https://github.com/dhis2/cli-utils-docsite/compare/v1.0.4...v1.1.0) (2019-08-30)
 
 
