@@ -165,7 +165,7 @@ module.exports = ({
             }
 
             if (jsdoc && jsdoc.length) {
-                processJSDoc()
+                await processJSDoc()
             }
         },
 
@@ -173,6 +173,7 @@ module.exports = ({
             const docsWatcher = chokidar
                 .watch(`${source}/**`, {
                     ignoreInitial: true,
+                    cwd: process.cwd(),
                 })
                 .on('all', (e, p) =>
                     reporter.print(
@@ -194,6 +195,7 @@ module.exports = ({
                 chokidar
                     .watch(jsdoc, {
                         ignoreInitial: true,
+                        cwd: process.cwd(),
                     })
                     .on('all', async (e, p) => {
                         reporter.print(
