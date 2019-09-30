@@ -19,7 +19,7 @@
         "chokidar": "^3.1.1",
         "front-matter": "^3.0.2",
         "fs-extra": "^8.1.0",
-        "jsdoc-to-markdown": "^5.0.0",
+        "jsdoc-to-markdown": "^5.0.1",
         "live-server": "^1.2.1",
         "match-all": "^1.2.5"
     },
