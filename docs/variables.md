@@ -1,6 +1,8 @@
 # Template Variables
 
-The following template variables are used to automatically generate the documentation site. They can be [configured](config) in several different ways, including in `package.json` and on the command line.
+The following template variables are used to automatically generate the
+documentation site. They can be [configured](config) in several
+different ways, including in `package.json` and on the command line.
 
 |      Name       |   Type   | Default           | Description                                                             |
 | :-------------: | :------: | ----------------- | ----------------------------------------------------------------------- |
