@@ -1,7 +1,6 @@
 const liveServer = require('live-server')
-const chalk = require('chalk')
 const path = require('path')
-const { reporter } = require('@dhis2/cli-helpers-engine')
+const { reporter, chalk } = require('@dhis2/cli-helpers-engine')
 const DocsEngine = require('../support/docs')
 const commonOptions = require('../support/commonOptions')
 
