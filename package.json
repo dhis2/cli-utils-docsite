@@ -1,37 +1,37 @@
 {
-    "name": "@dhis2/cli-utils-docsite",
-    "description": "Generate and serve standardized DHIS2 developer documentation",
-    "version": "1.1.1",
-    "bin": {
-        "d2-utils-docsite": "./bin/d2-utils-docsite"
-    },
-    "main": "src/index.js",
-    "author": "Austin McGee <austin@dhis2.org>",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/dhis2/cli-utils-docsite.git"
-    },
-    "license": "BSD-3-Clause",
-    "private": false,
-    "dependencies": {
-        "@dhis2/cli-helpers-engine": "^1.4.2",
-        "@dhis2/cli-helpers-template": "^1.0.1",
-        "chokidar": "^3.3.0",
-        "front-matter": "^3.0.2",
-        "fs-extra": "^8.1.0",
-        "jsdoc-to-markdown": "^5.0.3",
-        "live-server": "^1.2.1",
-        "match-all": "^1.2.5"
-    },
-    "scripts": {
-        "build:docs": "./bin/d2-utils-docsite build ./docs -o dist --jsdoc src/ --jsdocOutputFile api.md",
-        "serve": "./bin/d2-utils-docsite serve ./docs -o dist --jsdoc src/ --jsdocOutputFile api.md",
-        "test": "yarn build:docs"
-    },
-    "publishConfig": {
-        "access": "public"
-    },
-    "devDependencies": {
-        "@dhis2/cli-style": "^4.2.0"
-    }
+  "name": "@dhis2/cli-utils-docsite",
+  "description": "Generate and serve standardized DHIS2 developer documentation",
+  "version": "1.1.1",
+  "bin": {
+    "d2-utils-docsite": "./bin/d2-utils-docsite"
+  },
+  "main": "src/index.js",
+  "author": "Austin McGee <austin@dhis2.org>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dhis2/cli-utils-docsite.git"
+  },
+  "license": "BSD-3-Clause",
+  "private": false,
+  "dependencies": {
+    "@dhis2/cli-helpers-engine": "^1.5.0",
+    "@dhis2/cli-helpers-template": "^1.0.2",
+    "chokidar": "^3.3.0",
+    "front-matter": "^3.0.2",
+    "fs-extra": "^8.1.0",
+    "jsdoc-to-markdown": "^5.0.3",
+    "live-server": "^1.2.1",
+    "match-all": "^1.2.5"
+  },
+  "scripts": {
+    "build:docs": "./bin/d2-utils-docsite build ./docs -o dist --jsdoc src/ --jsdocOutputFile api.md",
+    "serve": "./bin/d2-utils-docsite serve ./docs -o dist --jsdoc src/ --jsdocOutputFile api.md",
+    "test": "yarn build:docs"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@dhis2/cli-style": "^4.2.0"
+  }
 }

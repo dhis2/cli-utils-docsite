@@ -1,5 +1,4 @@
-const { bold: b } = require('chalk')
-const { reporter } = require('@dhis2/cli-helpers-engine')
+const { reporter, chalk } = require('@dhis2/cli-helpers-engine')
 const jsdoc2md = require('jsdoc-to-markdown')
 const fs = require('fs-extra')
 const path = require('path')
@@ -11,7 +10,9 @@ const render = async (source, dest) => {
     )
 
     reporter.debug(
-        `[jsdoc] Rendering ${b(files.length)} files to ${b(dest)}`,
+        `[jsdoc] Rendering ${chalk.bold(files.length)} files to ${chalk.bold(
+            dest
+        )}`,
         files
     )
     const markdown = await jsdoc2md.render({

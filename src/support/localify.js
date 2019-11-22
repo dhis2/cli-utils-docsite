@@ -2,7 +2,7 @@ const fs = require('fs-extra')
 const path = require('path')
 const matchAll = require('match-all')
 
-const { reporter } = require('@dhis2/cli-helpers-engine')
+const { reporter, chalk } = require('@dhis2/cli-helpers-engine')
 const cacheBase = 'utils/docsite/assets'
 
 const regexp = /"(http(?:s?):\/\/[^"]+)"/g
