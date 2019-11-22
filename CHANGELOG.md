@@ -1,3 +1,10 @@
+## [1.1.2](https://github.com/dhis2/cli-utils-docsite/compare/v1.1.1...v1.1.2) (2019-11-22)
+
+
+### Bug Fixes
+
+* upgrade @dhis2/cli-helpers-engine and @dhis2/cli-helpers-template ([#27](https://github.com/dhis2/cli-utils-docsite/issues/27)) ([807ac90](https://github.com/dhis2/cli-utils-docsite/commit/807ac90832aa7ab8863737e0a90717d47630aa52))
+
 ## [1.1.1](https://github.com/dhis2/cli-utils-docsite/compare/v1.1.0...v1.1.1) (2019-09-13)
 
 
