@@ -56,6 +56,7 @@ const loadData = ({ dataInput, configFile, packageJsonFile }) => {
         configData = {
             ...config,
             ...config.docsite,
+            ...config.js2docmd,
         }
         reporter.debug(`Template data loaded from config file ${configFile}`)
     } catch (e) {
@@ -71,6 +72,7 @@ const loadData = ({ dataInput, configFile, packageJsonFile }) => {
             repo: parsePackageRepository(pkg.repository),
             ...pkg.d2,
             ...(pkg.d2 && pkg.d2.docsite),
+            ...(pkg.d2 && pkg.d2.jsdoc2md),
         }
         reporter.debug(
             `Template data loaded from package.json file ${packageJsonFile}`
@@ -126,7 +128,7 @@ module.exports = ({
     }
 
     const processJSDoc = async () => {
-        await JSDocEngine.render(jsdoc, jsdocOut)
+        await JSDocEngine.render(jsdoc, jsdocOut, data)
     }
 
     const processOnDeleted = async p => {
