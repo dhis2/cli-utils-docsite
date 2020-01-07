@@ -128,7 +128,7 @@ module.exports = ({
     }
 
     const processJSDoc = async () => {
-        await JSDocEngine.render(jsdoc, jsdocOut, data)
+        await JSDocEngine.render(jsdoc, jsdocOut, data.jsdoc2md)
     }
 
     const processOnDeleted = async p => {
