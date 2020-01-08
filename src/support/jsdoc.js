@@ -3,7 +3,7 @@ const jsdoc2md = require('jsdoc-to-markdown')
 const fs = require('fs-extra')
 const path = require('path')
 
-const render = async (source, dest) => {
+const render = async (source, dest, options) => {
     let files = Array.isArray(source) ? source : [source]
     files = files.map(f =>
         fs.statSync(f).isDirectory() ? path.join(f, '/**/*') : f
@@ -15,12 +15,18 @@ const render = async (source, dest) => {
         )}`,
         files
     )
-    const markdown = await jsdoc2md.render({
+
+    const defaults = {
         files,
         'heading-depth': 2,
         'example-lang': 'jsx',
         'param-format': 'code',
         'global-index-format': 'list',
+    }
+
+    const markdown = await jsdoc2md.render({
+        ...defaults,
+        ...options,
     })
 
     await fs.writeFile(dest, markdown)
