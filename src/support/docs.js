@@ -113,6 +113,7 @@ module.exports = ({
         configFile,
         packageJsonFile: path.join(process.cwd(), 'package.json'),
     })
+
     data.sourcedir = data.sourcedir
         ? path.join(data.sourcedir, path.relative(process.cwd(), source))
         : path.relative(process.cwd(), source)
@@ -126,7 +127,7 @@ module.exports = ({
     }
 
     const processJSDoc = async () => {
-        await JSDocEngine.render(jsdoc, jsdocOut, data)
+        await JSDocEngine.render(jsdoc, jsdocOut, data.docsite.jsdoc2md)
     }
 
     const processOnDeleted = async p => {

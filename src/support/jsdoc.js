@@ -26,7 +26,7 @@ const render = async (source, dest, options) => {
 
     const markdown = await jsdoc2md.render({
         ...defaults,
-        ...options.docsite.jsdoc2md,
+        ...options,
     })
 
     await fs.writeFile(dest, markdown)
