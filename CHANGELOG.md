@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/dhis2/cli-utils-docsite/compare/v1.1.2...v1.2.0) (2020-01-08)
+
+
+### Features
+
+* **jsdoc2md:** allow d2.config.js configuration ([#35](https://github.com/dhis2/cli-utils-docsite/issues/35)) ([bb757d9](https://github.com/dhis2/cli-utils-docsite/commit/bb757d970cf04ff2fa9489175e1c7dc0e76632a8)), closes [/github.com/jsdoc2md/jsdoc-to-markdown/blob/master/docs/API.md#jsdoc2](https://github.com//github.com/jsdoc2md/jsdoc-to-markdown/blob/master/docs/API.md/issues/jsdoc2)
+
 ## [1.1.2](https://github.com/dhis2/cli-utils-docsite/compare/v1.1.1...v1.1.2) (2019-11-22)
 
 
