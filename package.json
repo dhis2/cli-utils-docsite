@@ -1,7 +1,7 @@
 {
   "name": "@dhis2/cli-utils-docsite",
   "description": "Generate and serve standardized DHIS2 developer documentation",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "bin": {
     "d2-utils-docsite": "./bin/d2-utils-docsite"
   },

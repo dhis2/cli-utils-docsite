@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/dhis2/cli-utils-docsite/compare/v1.2.0...v1.2.1) (2020-01-10)
+
+
+### Bug Fixes
+
+* avoid undefined property access ([2cf4c3c](https://github.com/dhis2/cli-utils-docsite/commit/2cf4c3c0c53e0df2ee483115c6274b58b3303a02))
+
 # [1.2.0](https://github.com/dhis2/cli-utils-docsite/compare/v1.1.2...v1.2.0) (2020-01-08)
 
 
