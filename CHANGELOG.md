@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/dhis2/cli-utils-docsite/compare/v1.2.1...v1.3.0) (2020-01-13)
+
+
+### Features
+
+* update CLI link in navbar ([#37](https://github.com/dhis2/cli-utils-docsite/issues/37)) ([90aa855](https://github.com/dhis2/cli-utils-docsite/commit/90aa8557db8ee15d7837ecd7696db3dcb8a4b1dc))
+
 ## [1.2.1](https://github.com/dhis2/cli-utils-docsite/compare/v1.2.0...v1.2.1) (2020-01-10)
 
 
