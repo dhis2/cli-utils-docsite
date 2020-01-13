@@ -1,3 +1,3 @@
--   [CLI](https://github.com/dhis2/cli)
+-   [CLI](https://cli.dhis2.nu)
 -   [Platform](https://platform.dhis2.nu)
 -   [Runtime](https://runtime.dhis2.nu)
