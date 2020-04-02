@@ -1,3 +1,15 @@
+# [2.0.0](https://github.com/dhis2/cli-utils-docsite/compare/v1.3.0...v2.0.0) (2020-04-02)
+
+
+### chore
+
+* update node engine to >= 10 ([1f7b11c](https://github.com/dhis2/cli-utils-docsite/commit/1f7b11cf5688715876cbae9f2be4628b29173b66))
+
+
+### BREAKING CHANGES
+
+* Require Node version 10 or above.
+
 # [1.3.0](https://github.com/dhis2/cli-utils-docsite/compare/v1.2.1...v1.3.0) (2020-01-13)
 
 
