@@ -1,3 +1,4 @@
+/* globals EditOnGithubPlugin */
 window.$docsify = {
     name: '{{{name}}}',
     repo: '{{{repo}}}',
