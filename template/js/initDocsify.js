@@ -17,6 +17,7 @@ window.$docsify = {
     maxLevel: 1,
     auto2top: true,
     externalLinkTarget: '_self',
+    noCompileLinks: ['/demo/.*'],
 
     pagination: {
         crossChapter: true,
