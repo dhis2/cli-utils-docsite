@@ -1918,10 +1918,10 @@ from@~0:
   resolved "https://registry.yarnpkg.com/from/-/from-0.1.7.tgz#83c60afc58b9c56997007ed1a768b3ab303a44fe"
   integrity sha1-g8YK/Fi5xWmXAH7Rp2izqzA6RP4=
 
-front-matter@^3.1.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/front-matter/-/front-matter-3.1.0.tgz#a0b758c3c6c39ce43e107dd0909a57d42964c2de"
-  integrity sha512-RFEK8N6waWTdwBZOPNEtvwMjZ/hUfpwXkYUYkmmOhQGdhSulXhWrFwiUhdhkduLDiIwbROl/faF1X/PC/GGRMw==
+front-matter@^3.2.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/front-matter/-/front-matter-3.2.0.tgz#371c6862fd8feb2c382374c34e4cd3391cb8f81f"
+  integrity sha512-/+aOB9LCJQNO+AsgCx75lF5YgNLq7KBzGModuADYAtop+GIaKgX++HVLBrzCPMwKaJKVjupumzx4aM8PLQsqtg==
   dependencies:
     js-yaml "^3.13.1"
 
