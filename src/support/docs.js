@@ -118,6 +118,16 @@ module.exports = ({
         ? path.join(data.sourcedir, path.relative(process.cwd(), source))
         : path.relative(process.cwd(), source)
 
+    data.generatedPages = [
+        changelog && fs.existsSync(changelogFile) && 'CHANGELOG',
+        !fs.existsSync(path.join(data.sourcedir, 'README.md')) && 'README',
+        !fs.existsSync(path.join(data.sourcedir, 'getting-started.md')) &&
+            'getting-started',
+        jsdoc && jsdoc.length && jsdocOutputFile.replace(/\.md$/, ''),
+    ]
+        .filter(x => !!x)
+        .join(',')
+
     const processOnChanged = async p => {
         const outPath =
             path.relative(process.cwd(), p) === changelogFile

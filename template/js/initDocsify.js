@@ -1,4 +1,8 @@
 /* globals EditOnGithubPlugin */
+
+const generatedPages = '{{{generatedPages}}}'.split(',')
+
+console.log(generatedPages)
 window.$docsify = {
     name: '{{{name}}}',
     repo: '{{{repo}}}',
@@ -26,7 +30,14 @@ window.$docsify = {
         EditOnGithubPlugin.create(
             '{{{repo}}}/blob/master/{{{sourcedir}}}',
             undefined,
-            '&#x270E;&nbsp;&nbsp;Edit on GitHub'
+            name => {
+                if (
+                    generatedPages.find(page => name.match(`\\/?${page}\\.md`))
+                ) {
+                    return null
+                }
+                return '&#x270E;&nbsp;&nbsp;Edit on GitHub'
+            }
         ),
     ],
 }
