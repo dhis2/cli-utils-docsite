@@ -1,3 +1,10 @@
+## [2.0.1](https://github.com/dhis2/cli-utils-docsite/compare/v2.0.0...v2.0.1) (2020-06-03)
+
+
+### Bug Fixes
+
+* add link to UI docsite to navbar ([4c72bc4](https://github.com/dhis2/cli-utils-docsite/commit/4c72bc45f1280b4dab256b6ed30c3532680721a7))
+
 # [2.0.0](https://github.com/dhis2/cli-utils-docsite/compare/v1.3.0...v2.0.0) (2020-04-02)
 
 
