@@ -1,3 +1,10 @@
+## [2.0.2](https://github.com/dhis2/cli-utils-docsite/compare/v2.0.1...v2.0.2) (2020-06-03)
+
+
+### Bug Fixes
+
+* hide Edit on Github link for generated pages ([544986e](https://github.com/dhis2/cli-utils-docsite/commit/544986e932a73d98f263895143d1a85e647c7818))
+
 ## [2.0.1](https://github.com/dhis2/cli-utils-docsite/compare/v2.0.0...v2.0.1) (2020-06-03)
 
 
