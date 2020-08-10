@@ -3019,10 +3019,10 @@ marked@^0.8.2:
   resolved "https://registry.yarnpkg.com/marked/-/marked-0.8.2.tgz#4faad28d26ede351a7a1aaa5fec67915c869e355"
   integrity sha512-EGwzEeCcLniFX51DhTpmTom+dSA/MG/OBUDjnWtHbEnjAH180VzUeAw+oE4+Zv+CoYBWyRlYOTR0N8SO9R1PVw==
 
-match-all@^1.2.5:
-  version "1.2.5"
-  resolved "https://registry.yarnpkg.com/match-all/-/match-all-1.2.5.tgz#f709af311a7cb9ae464d9107a4f0fe08d3326eff"
-  integrity sha512-KW4trRDMYbVkAKZ1J655vh0931mk3XM1lIJ480TXUL3KBrOsZ6WpryYJELonvtXC1O4erLYB069uHidLkswbjQ==
+match-all@^1.2.6:
+  version "1.2.6"
+  resolved "https://registry.yarnpkg.com/match-all/-/match-all-1.2.6.tgz#66d276ad6b49655551e63d3a6ee53e8be0566f8d"
+  integrity sha512-0EESkXiTkWzrQQntBu2uzKvLu6vVkUGz40nGPbSZuegcfE5UuSzNjLaIu76zJWuaT/2I3Z/8M06OlUOZLGwLlQ==
 
 mdurl@^1.0.1:
   version "1.0.1"
