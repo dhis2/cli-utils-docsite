@@ -1,3 +1,10 @@
+## [2.0.3](https://github.com/dhis2/cli-utils-docsite/compare/v2.0.2...v2.0.3) (2020-11-06)
+
+
+### Bug Fixes
+
+* cut release to finalize migration to jira ([99c9be1](https://github.com/dhis2/cli-utils-docsite/commit/99c9be1e8d745e15a81c8f6fd6194404bda0c7ec))
+
 ## [2.0.2](https://github.com/dhis2/cli-utils-docsite/compare/v2.0.1...v2.0.2) (2020-06-03)
 
 
