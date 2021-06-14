@@ -29,7 +29,7 @@
     "scripts": {
         "build": "./bin/d2-utils-docsite build ./docs -o dist --jsdoc src/ --jsdocOutputFile api.md",
         "serve": "./bin/d2-utils-docsite serve ./docs -o dist --jsdoc src/ --jsdocOutputFile api.md",
-        "lint": "d2-style js check && d2-style text check"
+        "lint": "d2-style check"
     },
     "publishConfig": {
         "access": "public"
