@@ -1,3 +1,15 @@
+# [3.0.0](https://github.com/dhis2/cli-utils-docsite/compare/v2.0.3...v3.0.0) (2021-06-14)
+
+
+### chore
+
+* remove node 10 support ([c9f5223](https://github.com/dhis2/cli-utils-docsite/commit/c9f5223d639a5219749b582a15c620aad1c9fbae))
+
+
+### BREAKING CHANGES
+
+* New minimum version for NodeJS is 12.x.
+
 ## [2.0.3](https://github.com/dhis2/cli-utils-docsite/compare/v2.0.2...v2.0.3) (2020-11-06)
 
 
