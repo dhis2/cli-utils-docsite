@@ -1,7 +1,7 @@
-const { reporter } = require('@dhis2/cli-helpers-engine')
-const DocsEngine = require('../support/docs')
 const path = require('path')
+const { reporter } = require('@dhis2/cli-helpers-engine')
 const commonOptions = require('../support/commonOptions')
+const DocsEngine = require('../support/docs')
 
 /**
  * @name build [source] [options]

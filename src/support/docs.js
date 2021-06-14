@@ -1,11 +1,10 @@
+const path = require('path')
 const { reporter, chalk } = require('@dhis2/cli-helpers-engine')
 const { installTemplate, walkDir } = require('@dhis2/cli-helpers-template')
-const fs = require('fs-extra')
-const path = require('path')
-const frontMatter = require('front-matter')
 const chokidar = require('chokidar')
+const frontMatter = require('front-matter')
+const fs = require('fs-extra')
 const JSDocEngine = require('../support/jsdoc')
-
 const { localify } = require('../support/localify')
 
 const templateDir = path.join(__dirname, '../../template')
