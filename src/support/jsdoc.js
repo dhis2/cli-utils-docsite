@@ -1,7 +1,7 @@
-const { reporter, chalk } = require('@dhis2/cli-helpers-engine')
-const jsdoc2md = require('jsdoc-to-markdown')
-const fs = require('fs-extra')
 const path = require('path')
+const { reporter, chalk } = require('@dhis2/cli-helpers-engine')
+const fs = require('fs-extra')
+const jsdoc2md = require('jsdoc-to-markdown')
 
 const render = async (source, dest, options) => {
     let files = Array.isArray(source) ? source : [source]
