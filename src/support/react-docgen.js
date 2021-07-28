@@ -1,6 +1,7 @@
+const path = require('path')
 const { reporter } = require('@dhis2/cli-helpers-engine')
-const { walkDir } = require('@dhis2/cli-helpers-template')
 const fs = require('fs-extra')
+const glob = require('glob')
 const reactDocgen = require('react-docgen')
 
 function getPropTypeDescription(propType) {
@@ -85,6 +86,7 @@ function mapPropEntryToPropTableRow([name, info]) {
 const propTableHeader = `| prop | type | description | default | required |
 | ---- | ---- | ----------- | ------- | -------- |`
 
+// todo: doc
 function getMarkdownFromDocgen(docgenDocs) {
     // Component name (with link?) [obj.displayName]
     // Optional filepath [obj.filepath] - added in rdParseFile() above
@@ -119,6 +121,11 @@ function getMarkdownFromDocgen(docgenDocs) {
     return componentDocs
 }
 
+/**
+ * Uses React Docgen to parse component APIs from a file.
+ * @param {string} filepath - Path to file to parse
+ * @returns {Array | undefined} An array of component docs objects or undefined if no components are found
+ */
 async function rdParseFile(filepath) {
     // exclude stories and tests and styles; include js|jsx|tsx
     const validFilePattern = /(?<!test|style|stories|e2e)\.[t|j]sx?$/
@@ -147,25 +154,54 @@ async function rdParseFile(filepath) {
     }
 }
 
-function renderReactDocs(rootDir = './src', outputPath = './react-api.md') {
-    return (
-        walkDir(rootDir, rdParseFile)
-            // Result is a nested array with some undefined elements
-            .then(arr =>
-                arr
-                    .flat(Infinity)
-                    .filter(e => e !== undefined)
-                    .map(getMarkdownFromDocgen)
-                    .join('\n\n')
-            )
-            .then(mdData => {
-                if (mdData.length) {
-                    return fs.writeFile(outputPath, mdData)
-                } else {
-                    reporter.debug('No react docs found')
-                }
-            })
+// todo: JSDoc
+function renderReactDocs(
+    inputGlobs = ['**/src'],
+    outputPath = './react-api.md'
+) {
+    const inputGlobsArray = Array.isArray(inputGlobs)
+        ? inputGlobs
+        : [inputGlobs]
+    // file filtering added in globs here to increase performance
+    const globs = inputGlobsArray.map(inputGlob =>
+        fs.statSync(inputGlob).isDirectory()
+            ? path.join(inputGlob, '/**/!(*.*).{js,jsx,tsx}')
+            : inputGlob
     )
+
+    // Process files in globs in parallel
+    return Promise.all(
+        globs.map(thisGlob => {
+            return new Promise((resolve, reject) => {
+                // Get filenames that match glob
+                glob(thisGlob, (err, matches) =>
+                    err ? reject(err) : resolve(matches)
+                )
+            }).then(matches => {
+                // Get docgen info in parallel & process into markdown
+                return Promise.all(
+                    matches.map(filepath =>
+                        rdParseFile(filepath).then(docgenInfo => {
+                            return docgenInfo
+                                ? docgenInfo.map(getMarkdownFromDocgen)
+                                : null
+                        })
+                    )
+                )
+            })
+        })
+    ).then(mdData => {
+        // mdData now has nested arrays with some undefined entries
+        const markdown = mdData
+            .flat(Infinity)
+            .filter(e => !!e)
+            .join('\n\n')
+        if (markdown.length) {
+            return fs.writeFile(outputPath, markdown)
+        } else {
+            reporter.debug('No react docs found')
+        }
+    })
 }
 
 module.exports = renderReactDocs

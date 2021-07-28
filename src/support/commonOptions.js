@@ -51,8 +51,9 @@ module.exports = {
         default: 'jsdoc.md',
     },
     reactDocs: {
-        type: 'string',
-        description: 'The root dir to parse with React Docgen',
+        type: 'array',
+        description: 'The path glob(s) to parse with React Docgen',
+        normalize: false,
     },
     reactDocsOutputFile: {
         type: 'string',

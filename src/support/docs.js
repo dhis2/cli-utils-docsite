@@ -186,7 +186,7 @@ module.exports = ({
                 await processJSDoc()
             }
 
-            if (reactDocs) {
+            if (reactDocs && reactDocs.length) {
                 await processReactDocs()
             }
         },
@@ -228,7 +228,7 @@ module.exports = ({
                     })
             }
 
-            if (reactDocs) {
+            if (reactDocs && reactDocs.length) {
                 chokidar
                     .watch(reactDocs, {
                         ignoreInitial: true,
