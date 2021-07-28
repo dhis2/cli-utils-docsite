@@ -1,6 +1,6 @@
-const fs = require('fs').promises
 const { reporter } = require('@dhis2/cli-helpers-engine')
 const { walkDir } = require('@dhis2/cli-helpers-template')
+const fs = require('fs-extra')
 const reactDocgen = require('react-docgen')
 
 async function rdParseFile(filepath) {
@@ -143,7 +143,7 @@ function mapPropEntryToPropTableRow([name, info]) {
     return `| ${propName} | ${propType} | ${propDescription} | ${propDefault} | ${propRequired} |`
 }
 
-function processReactDocgen(rootDir = './src', outputPath = 'react-api.md') {
+function processReactDocgen(rootDir = './src', outputPath = './react-api.md') {
     walkDir(rootDir, rdParseFile)
         // Result is a nested array with some undefined elements
         .then(arr =>
@@ -154,7 +154,6 @@ function processReactDocgen(rootDir = './src', outputPath = 'react-api.md') {
                 .join('\n\n')
         )
         .then(mdData => fs.writeFile(outputPath, mdData))
-        .then(console.log)
         .catch(console.err)
 }
 
