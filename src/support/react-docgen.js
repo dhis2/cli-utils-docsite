@@ -4,6 +4,10 @@ const fs = require('fs-extra')
 const glob = require('glob')
 const reactDocgen = require('react-docgen')
 
+/**
+ * @param {Object} propType A `propType` object from a React Docgen component docs object
+ * @returns {string} a string describing the type of that prop to put in a props table
+ */
 function getPropTypeDescription(propType) {
     // a prop with a default value but no type is null
     if (propType == null) {
@@ -55,12 +59,21 @@ function getPropTypeDescription(propType) {
     }
 }
 
+// todo
 // function getTsPropTypeDescription(tsType) {}
 
+/**
+ * @param {Object | undefined} defaultValue A `defaultValue` object from React Docgen component docs object
+ * @returns {string} a nice string to describe the default value in the props table
+ */
 function getPropDefaultValue(defaultValue) {
     return defaultValue ? '`' + defaultValue.value.replace(/\n/g, '') + '`' : ''
 }
 
+/**
+ * @param {Array} param0 A [key, value] entry of the `props` object of a React Docgen component docs object
+ * @returns {string} A markdown-notated props table row that documents the prop
+ */
 function mapPropEntryToPropTableRow([name, info]) {
     // See the props data structure:
     // https://github.com/reactjs/react-docgen#result-data-structure
@@ -86,7 +99,11 @@ function mapPropEntryToPropTableRow([name, info]) {
 const propTableHeader = `| prop | type | description | default | required |
 | ---- | ---- | ----------- | ------- | -------- |`
 
-// todo: doc
+/**
+ * Parses a React Docgen docs object and makes nice-looking markdown.
+ * @param {Object} docgenDocs - a docs object that is the result of React Docgen parsing a file
+ * @returns {string} Markdown describing the component that produced the docs object
+ */
 function getMarkdownFromDocgen(docgenDocs) {
     // Component name (with link?) [obj.displayName]
     // Optional filepath [obj.filepath] - added in rdParseFile() above
@@ -154,7 +171,13 @@ async function rdParseFile(filepath) {
     }
 }
 
-// todo: JSDoc
+/**
+ * Get React docs from files matching input paths/globs and output them to a
+ * file in the `dest` directory.
+ * @param {string[]} inputGlobs An array of paths/globs to parse for React docs
+ * @param {string} outputPath A path, relative to `dest`, where the resulting markdown will be output
+ * @returns {Promise}
+ */
 function renderReactDocs(
     inputGlobs = ['**/src'],
     outputPath = './react-api.md'
@@ -162,7 +185,7 @@ function renderReactDocs(
     const inputGlobsArray = Array.isArray(inputGlobs)
         ? inputGlobs
         : [inputGlobs]
-    // file filtering added in globs here to increase performance
+    // Some file filtering added in globs here to increase performance
     const globs = inputGlobsArray.map(inputGlob =>
         fs.statSync(inputGlob).isDirectory()
             ? path.join(inputGlob, '/**/!(*.*).{js,jsx,tsx}')

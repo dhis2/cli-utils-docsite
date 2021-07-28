@@ -13,7 +13,8 @@ module.exports.resolvePath
  * @param {string} changelogFile=./CHANGELOG.md - Path to changelog source file
  * @param {string} jsdoc - One or more arrays of paths (or globs) to search for `jsdoc` comments
  * @param {string} jsdocOutputFile=jsdoc.md - The path, relative to `dest`, in which to write the `jsdoc` output
- * todo: describe react docgen
+ * @param {string} reactDocs - One or more arrays of paths (or globs) to parse with React Docgen
+ * @param {string} reactDocsOutputFile=react-api.md - The path, relative to `dest`, in which to write the React docs output
  */
 module.exports = {
     dest: {
