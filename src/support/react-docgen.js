@@ -63,11 +63,22 @@ function getPropTypeDescription(propType) {
 // function getTsPropTypeDescription(tsType) {}
 
 /**
+ * Helps format strings for use in the props table
+ * @param {string} input
+ * @returns {string}
+ */
+function clearNewlinesAndWhitespace(input) {
+    return input.replace(/\n/g, ' ').replace(/\s+/g, ' ')
+}
+
+/**
  * @param {Object | undefined} defaultValue A `defaultValue` object from React Docgen component docs object
  * @returns {string} a nice string to describe the default value in the props table
  */
 function getPropDefaultValue(defaultValue) {
-    return defaultValue ? '`' + defaultValue.value.replace(/\n/g, '') + '`' : ''
+    return defaultValue
+        ? '`' + clearNewlinesAndWhitespace(defaultValue.value) + '`'
+        : ''
 }
 
 /**
@@ -90,7 +101,9 @@ function mapPropEntryToPropTableRow([name, info]) {
     // if (tsType !== undefined) ...
     const propType = '`' + getPropTypeDescription(type) + '`'
     const propDefault = getPropDefaultValue(defaultValue)
-    const propDescription = description || ''
+    const propDescription = description
+        ? clearNewlinesAndWhitespace(description)
+        : ''
     const propRequired = required || ''
 
     return `| ${propName} | ${propType} | ${propDescription} | ${propDefault} | ${propRequired} |`
