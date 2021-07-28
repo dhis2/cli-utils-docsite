@@ -6,6 +6,7 @@ const frontMatter = require('front-matter')
 const fs = require('fs-extra')
 const JSDocEngine = require('../support/jsdoc')
 const { localify } = require('../support/localify')
+const renderReactDocs = require('./react-docgen')
 
 const templateDir = path.join(__dirname, '../../template')
 
@@ -102,10 +103,13 @@ module.exports = ({
     changelogFile,
     jsdoc,
     jsdocOutputFile,
+    reactDocs,
+    reactDocsOutputFile,
 }) => {
     const cache = getCache()
     const markdownDir = path.join(dest, 'markdown')
     const jsdocOut = path.join(markdownDir, jsdocOutputFile)
+    const reactDocsOut = path.join(markdownDir, reactDocsOutputFile)
 
     const data = loadData({
         dataInput,
@@ -138,6 +142,10 @@ module.exports = ({
     const processJSDoc = async () => {
         const opts = { ...(data.docsite && data.docsite.jsdoc2md) }
         await JSDocEngine.render(jsdoc, jsdocOut, opts)
+    }
+
+    const processReactDocs = async () => {
+        await renderReactDocs(reactDocs, reactDocsOut)
     }
 
     const processOnDeleted = async p => {
@@ -177,6 +185,10 @@ module.exports = ({
             if (jsdoc && jsdoc.length) {
                 await processJSDoc()
             }
+
+            if (reactDocs) {
+                await processReactDocs()
+            }
         },
 
         watch: () => {
@@ -213,6 +225,21 @@ module.exports = ({
                             chalk.dim(path.relative(process.cwd(), p))
                         )
                         await processJSDoc()
+                    })
+            }
+
+            if (reactDocs) {
+                chokidar
+                    .watch(reactDocs, {
+                        ignoreInitial: true,
+                        cwd: process.cwd(),
+                    })
+                    .on('all', async (e, p) => {
+                        reporter.print(
+                            'React docs change detected!',
+                            chalk.dim(path.relative(process.cwd(), p))
+                        )
+                        await processReactDocs()
                     })
             }
 

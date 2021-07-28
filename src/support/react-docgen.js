@@ -5,7 +5,7 @@ const reactDocgen = require('react-docgen')
 
 async function rdParseFile(filepath) {
     // exclude stories and tests and styles; include js|jsx|tsx
-    const validFilePattern = /(?<!test|style|stories)\.[t|j]sx?$/
+    const validFilePattern = /(?<!test|style|stories|e2e)\.[t|j]sx?$/
     if (!validFilePattern.test(filepath)) {
         return
     }
@@ -14,14 +14,18 @@ async function rdParseFile(filepath) {
     reporter.debug(`Parsing file ${filepath} with react-docgen`)
 
     try {
-        const parsedInfo = reactDocgen.parse(fileData)
-        return { filepath, ...parsedInfo }
+        const parsedInfos = reactDocgen.parse(
+            fileData,
+            reactDocgen.resolver.findAllExportedComponentDefinitions
+        )
+        return parsedInfos.map(info => ({ ...info, filepath }))
     } catch (err) {
         // If a file doesn't have any react components, the parse function
         // throws a 'No suitable component definition found' error, which can
         // be ignored
         const ignoreMsg = /No suitable component definition found/
         if (!ignoreMsg.test(err.message)) {
+            reporter.error(`Error parsing ${filepath}`)
             throw err
         }
     }
@@ -78,12 +82,12 @@ function getPropTypeDescription(propType) {
         }
         case 'enum': {
             // 'oneOf': propType.value = [{ value: string, computed: bool }]
-            // '&#124;' makes a pipe character (|) in the markdown table
-            return propType.value.map(({ value }) => value).join(' &#124; ')
+            // pipe (|) needs an escaped '\' to appear in the markdown table
+            return propType.value.map(({ value }) => value).join(' \\| ')
         }
         case 'union': {
             // 'oneOfType': propType.value = [propType, propType, ...]
-            return propType.value.map(getPropTypeDescription).join(' &#124; ')
+            return propType.value.map(getPropTypeDescription).join(' \\| ')
         }
         case 'exact':
         case 'shape': {
@@ -143,7 +147,7 @@ function mapPropEntryToPropTableRow([name, info]) {
     return `| ${propName} | ${propType} | ${propDescription} | ${propDefault} | ${propRequired} |`
 }
 
-function processReactDocgen(rootDir = './src', outputPath = './react-api.md') {
+function renderReactDocs(rootDir = './src', outputPath = './react-api.md') {
     return (
         walkDir(rootDir, rdParseFile)
             // Result is a nested array with some undefined elements
@@ -154,8 +158,14 @@ function processReactDocgen(rootDir = './src', outputPath = './react-api.md') {
                     .map(getMarkdownFromDocgen)
                     .join('\n\n')
             )
-            .then(mdData => fs.writeFile(outputPath, mdData))
+            .then(mdData => {
+                if (mdData.length) {
+                    return fs.writeFile(outputPath, mdData)
+                } else {
+                    reporter.debug('No react docs found')
+                }
+            })
     )
 }
 
-module.exports = processReactDocgen
+module.exports = renderReactDocs
