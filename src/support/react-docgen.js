@@ -144,17 +144,18 @@ function mapPropEntryToPropTableRow([name, info]) {
 }
 
 function processReactDocgen(rootDir = './src', outputPath = './react-api.md') {
-    walkDir(rootDir, rdParseFile)
-        // Result is a nested array with some undefined elements
-        .then(arr =>
-            arr
-                .flat(Infinity)
-                .filter(e => e !== undefined)
-                .map(getMarkdownFromDocgen)
-                .join('\n\n')
-        )
-        .then(mdData => fs.writeFile(outputPath, mdData))
-        .catch(console.err)
+    return (
+        walkDir(rootDir, rdParseFile)
+            // Result is a nested array with some undefined elements
+            .then(arr =>
+                arr
+                    .flat(Infinity)
+                    .filter(e => e !== undefined)
+                    .map(getMarkdownFromDocgen)
+                    .join('\n\n')
+            )
+            .then(mdData => fs.writeFile(outputPath, mdData))
+    )
 }
 
 module.exports = processReactDocgen
