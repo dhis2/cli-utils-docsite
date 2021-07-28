@@ -3,71 +3,6 @@ const { walkDir } = require('@dhis2/cli-helpers-template')
 const fs = require('fs-extra')
 const reactDocgen = require('react-docgen')
 
-async function rdParseFile(filepath) {
-    // exclude stories and tests and styles; include js|jsx|tsx
-    const validFilePattern = /(?<!test|style|stories|e2e)\.[t|j]sx?$/
-    if (!validFilePattern.test(filepath)) {
-        return
-    }
-
-    const fileData = await fs.readFile(filepath)
-    reporter.debug(`Parsing file ${filepath} with react-docgen`)
-
-    try {
-        const parsedInfos = reactDocgen.parse(
-            fileData,
-            reactDocgen.resolver.findAllExportedComponentDefinitions
-        )
-        return parsedInfos.map(info => ({ ...info, filepath }))
-    } catch (err) {
-        // If a file doesn't have any react components, the parse function
-        // throws a 'No suitable component definition found' error, which can
-        // be ignored
-        const ignoreMsg = /No suitable component definition found/
-        if (!ignoreMsg.test(err.message)) {
-            reporter.error(`Error parsing ${filepath}`)
-            throw err
-        }
-    }
-}
-
-const propTableHeader = `| prop | type | description | default | required |
-| ---- | ---- | ----------- | ------- | -------- |`
-
-function getMarkdownFromDocgen(docgenDocs) {
-    // Component name (with link?) [obj.displayName]
-    // Optional filepath [obj.filepath] - added in rdParseFile() above
-    // Component description [obj.description]
-    // Proptypes [obj.props] - object keyed with prop names (see more below)
-    // Methods? [obj.methods] - functions within the component that use /** @public */
-    // Composes? (link to composed element) [obj.composes]
-    const displayName = `### ${docgenDocs.displayName}`
-    const filepath = `#### ${docgenDocs.filepath}`
-    const composes = docgenDocs.composes
-        ? `Composes ${docgenDocs.composes.join(', ')}`
-        : null
-
-    let propTable = null
-    if (docgenDocs.props) {
-        const propTableRows = Object.entries(docgenDocs.props)
-            .sort(([aKey], [bKey]) => aKey.localeCompare(bKey))
-            .map(mapPropEntryToPropTableRow)
-            .join('\n')
-        propTable = [propTableHeader, propTableRows].join('\n')
-    }
-
-    const componentDocs = [
-        displayName,
-        filepath,
-        docgenDocs.description,
-        composes,
-        propTable,
-    ]
-        .filter(e => !!e)
-        .join('\n\n')
-    return componentDocs
-}
-
 function getPropTypeDescription(propType) {
     // a prop with a default value but no type is null
     if (propType == null) {
@@ -145,6 +80,71 @@ function mapPropEntryToPropTableRow([name, info]) {
     const propRequired = required || ''
 
     return `| ${propName} | ${propType} | ${propDescription} | ${propDefault} | ${propRequired} |`
+}
+
+const propTableHeader = `| prop | type | description | default | required |
+| ---- | ---- | ----------- | ------- | -------- |`
+
+function getMarkdownFromDocgen(docgenDocs) {
+    // Component name (with link?) [obj.displayName]
+    // Optional filepath [obj.filepath] - added in rdParseFile() above
+    // Component description [obj.description]
+    // Proptypes [obj.props] - object keyed with prop names (see more below)
+    // Methods? [obj.methods] - functions within the component that use /** @public */
+    // Composes? (link to composed element) [obj.composes]
+    const displayName = `### ${docgenDocs.displayName}`
+    const filepath = `#### ${docgenDocs.filepath}`
+    const composes = docgenDocs.composes
+        ? `Composes ${docgenDocs.composes.join(', ')}`
+        : null
+
+    let propTable = null
+    if (docgenDocs.props) {
+        const propTableRows = Object.entries(docgenDocs.props)
+            .sort(([aKey], [bKey]) => aKey.localeCompare(bKey))
+            .map(mapPropEntryToPropTableRow)
+            .join('\n')
+        propTable = [propTableHeader, propTableRows].join('\n')
+    }
+
+    const componentDocs = [
+        displayName,
+        filepath,
+        docgenDocs.description,
+        composes,
+        propTable,
+    ]
+        .filter(e => !!e)
+        .join('\n\n')
+    return componentDocs
+}
+
+async function rdParseFile(filepath) {
+    // exclude stories and tests and styles; include js|jsx|tsx
+    const validFilePattern = /(?<!test|style|stories|e2e)\.[t|j]sx?$/
+    if (!validFilePattern.test(filepath)) {
+        return
+    }
+
+    const fileData = await fs.readFile(filepath)
+    reporter.debug(`Parsing file ${filepath} with react-docgen`)
+
+    try {
+        const parsedInfos = reactDocgen.parse(
+            fileData,
+            reactDocgen.resolver.findAllExportedComponentDefinitions
+        )
+        return parsedInfos.map(info => ({ ...info, filepath }))
+    } catch (err) {
+        // If a file doesn't have any react components, the parse function
+        // throws a 'No suitable component definition found' error, which can
+        // be ignored
+        const ignoreMsg = /No suitable component definition found/
+        if (!ignoreMsg.test(err.message)) {
+            reporter.error(`Error parsing ${filepath}`)
+            throw err
+        }
+    }
 }
 
 function renderReactDocs(rootDir = './src', outputPath = './react-api.md') {
