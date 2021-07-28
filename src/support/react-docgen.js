@@ -117,7 +117,7 @@ function getMarkdownFromDocgen(docgenDocs) {
         ? `Composes ${docgenDocs.composes.join(', ')}`
         : null
 
-    let propTable = null
+    let propTable = '*No props detected for this component.*'
     if (docgenDocs.props) {
         const propTableRows = Object.entries(docgenDocs.props)
             .sort(([aKey], [bKey]) => aKey.localeCompare(bKey))
