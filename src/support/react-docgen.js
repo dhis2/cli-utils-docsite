@@ -2,6 +2,7 @@ const path = require('path')
 const { reporter } = require('@dhis2/cli-helpers-engine')
 const fs = require('fs-extra')
 const glob = require('glob')
+const marked = require('marked')
 const reactDocgen = require('react-docgen')
 
 /**
@@ -22,12 +23,11 @@ function getPropTypeDescription(propType) {
         }
         case 'enum': {
             // 'oneOf': propType.value = [{ value: string, computed: bool }]
-            // pipe (|) needs an escaped '\' to appear in the markdown table
-            return propType.value.map(({ value }) => value).join(' \\| ')
+            return propType.value.map(({ value }) => value).join(' | ')
         }
         case 'union': {
             // 'oneOfType': propType.value = [propType, propType, ...]
-            return propType.value.map(getPropTypeDescription).join(' \\| ')
+            return propType.value.map(getPropTypeDescription).join(' | ')
         }
         case 'exact':
         case 'shape': {
@@ -62,30 +62,42 @@ function getPropTypeDescription(propType) {
 // todo
 // function getTsPropTypeDescription(tsType) {}
 
+const wrapInHTMLTag = (content, tag) => `<${tag}>${content}</${tag}>`
+const isMultiline = str => /\n/.test(str)
+
 /**
- * Helps format strings for use in the props table
- * @param {string} input
- * @returns {string}
+ * Text parsed by `marked` is wrapped in `p` tags by default, which adds
+ * substantial height to each table row. `marked.parseInline` omits `p` tags
+ * if possible, which will make tables more compact
+ * @param {string} markdown
+ * @returns {string} HTML generated from markdown
  */
-function clearNewlinesAndWhitespace(input) {
-    return input.replace(/\n/g, ' ').replace(/\s+/g, ' ')
+function parseInlineOrMultiline(markdown) {
+    return isMultiline(markdown)
+        ? marked(markdown)
+        : marked.parseInline(markdown)
 }
 
 /**
- * @param {Object | undefined} defaultValue A `defaultValue` object from React Docgen component docs object
- * @returns {string} a nice string to describe the default value in the props table
+ * Takes a string of some code that will be formatted appropriately as a
+ * single-line or multi-line code block
+ * @param {string} code
+ * @returns {string} HTML output
  */
-function getPropDefaultValue(defaultValue) {
-    return defaultValue
-        ? '`' + clearNewlinesAndWhitespace(defaultValue.value) + '`'
-        : ''
+function formatCodeToHTML(code) {
+    // for formatting consistency with the rest of the page, go to markdown
+    // first, then parse markdown to HTML with the same parser as Docsify
+    const codeMarkdown = isMultiline(code)
+        ? '```js\n' + code + '\n```'
+        : '`' + code + '`'
+    return parseInlineOrMultiline(codeMarkdown)
 }
 
 /**
- * @param {Array} param0 A [key, value] entry of the `props` object of a React Docgen component docs object
- * @returns {string} A markdown-notated props table row that documents the prop
+ * @param {Array} propEntry A [key, value] entry of the `props` object of a React Docgen component docs object
+ * @returns {string} An HTML props table row that documents the prop
  */
-function mapPropEntryToPropTableRow([name, info]) {
+function mapPropEntryToHTMLPropTableRow([name, info]) {
     // See the props data structure:
     // https://github.com/reactjs/react-docgen#result-data-structure
     const {
@@ -96,21 +108,60 @@ function mapPropEntryToPropTableRow([name, info]) {
         // tsType,
     } = info
 
-    const propName = '`' + name + '`'
     // Todo: get description from TS type
-    // if (tsType !== undefined) ...
-    const propType = '`' + getPropTypeDescription(type) + '`'
-    const propDefault = getPropDefaultValue(defaultValue)
+    // if (tsType) { ... }
+
+    const propName = formatCodeToHTML(name)
+    // todo: needs improving
+    const propType = formatCodeToHTML(getPropTypeDescription(type))
+    // process prop description as markdown
     const propDescription = description
-        ? clearNewlinesAndWhitespace(description)
+        ? parseInlineOrMultiline(description)
         : ''
+    const propDefault = defaultValue ? formatCodeToHTML(defaultValue.value) : ''
     const propRequired = required || ''
 
-    return `| ${propName} | ${propType} | ${propDescription} | ${propDefault} | ${propRequired} |`
+    const tableCells = [
+        propName,
+        propType,
+        propDescription,
+        propDefault,
+        propRequired,
+    ]
+        .map(cellContents => wrapInHTMLTag(cellContents, 'td'))
+        .join('')
+
+    return wrapInHTMLTag(tableCells, 'tr')
 }
 
-const propTableHeader = `| prop | type | description | default | required |
-| ---- | ---- | ----------- | ------- | -------- |`
+/**
+ * @param {string} rows - `<tr>` elements that will comprise the table body
+ * @returns {string} A complete HTML prop table
+ */
+function addRowsToPropTableTemplate(rows) {
+    return `<table>
+    <thead>
+        <tr>
+            <th>prop</th>
+            <th>type</th>
+            <th>description</th>
+            <th>default</th>
+            <th>required</th>
+        </tr>
+    </thead>
+    <tbody>
+        ${rows}
+    </tbody>
+</table>`
+}
+
+function getHTMLPropTable(docgenProps) {
+    const propTableRows = Object.entries(docgenProps)
+        .sort(([aKey], [bKey]) => aKey.localeCompare(bKey))
+        .map(mapPropEntryToHTMLPropTableRow)
+        .join('\n')
+    return addRowsToPropTableTemplate(propTableRows)
+}
 
 /**
  * Parses a React Docgen docs object and makes nice-looking markdown.
@@ -130,14 +181,9 @@ function getMarkdownFromDocgen(docgenDocs) {
         ? `Composes ${docgenDocs.composes.join(', ')}`
         : null
 
-    let propTable = '*No props detected for this component.*'
-    if (docgenDocs.props) {
-        const propTableRows = Object.entries(docgenDocs.props)
-            .sort(([aKey], [bKey]) => aKey.localeCompare(bKey))
-            .map(mapPropEntryToPropTableRow)
-            .join('\n')
-        propTable = [propTableHeader, propTableRows].join('\n')
-    }
+    const propTable = docgenDocs.props
+        ? getHTMLPropTable(docgenDocs.props)
+        : '*No props detected for this component.*'
 
     const componentDocs = [
         displayName,

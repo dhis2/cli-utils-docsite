@@ -25,6 +25,7 @@
         "glob": "^7.1.7",
         "jsdoc-to-markdown": "^5.0.3",
         "live-server": "^1.2.1",
+        "marked": "^2.1.3",
         "match-all": "^1.2.5",
         "react-docgen": "^5.4.0"
     },
@@ -33,6 +34,8 @@
         "serve": "./bin/d2-utils-docsite serve ./docs -o dist --jsdoc src/ --jsdocOutputFile api.md",
         "docgen-test-ui": "./bin/d2-utils-docsite build ./docs -o dist --reactDocs ../ui/components/**/src --reactDocsOutputFile ui-test.md --debug",
         "docgen-serve-ui": "./bin/d2-utils-docsite serve ./docs -o dist --reactDocs ../ui/components/**/src --reactDocsOutputFile ui-test.md --debug",
+        "docgen-build-playground": "./bin/d2-utils-docsite build ./docs -o dist --reactDocs ../../dhis2-playground/docgen-testing/src --reactDocsOutputFile ui-test.md --debug",
+        "docgen-serve-playground": "./bin/d2-utils-docsite serve ./docs -o dist --reactDocs ../../dhis2-playground/docgen-testing/src --reactDocsOutputFile ui-test.md --debug",
         "lint": "d2-style check"
     },
     "publishConfig": {
