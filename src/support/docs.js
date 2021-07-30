@@ -6,7 +6,7 @@ const frontMatter = require('front-matter')
 const fs = require('fs-extra')
 const JSDocEngine = require('../support/jsdoc')
 const { localify } = require('../support/localify')
-const renderReactDocs = require('./react-docgen')
+const renderReactDocs = require('./react-docs/react-docs')
 
 const templateDir = path.join(__dirname, '../../template')
 
