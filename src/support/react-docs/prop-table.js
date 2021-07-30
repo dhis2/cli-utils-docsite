@@ -72,10 +72,14 @@ function getPropTypeDescription(propType) {
         }
         case 'arrayOf': {
             // recursively get nested prop types
-            return `arrayOf(${getPropTypeDescription(propType.value)})`
+            const propSubtype = getPropTypeDescription(propType.value)
+            // test: complex subtypes have non-word characters in them
+            const subtypeIsComplex = /\W/g.test(propSubtype)
+            // wrap complex subtypes in [] or put [] after simple subtypes
+            return subtypeIsComplex ? `[${propSubtype}]` : `${propSubtype}[]`
         }
         case 'objectOf': {
-            return `objectOf(${getPropTypeDescription(propType.value)})`
+            return `{ [key]: ${getPropTypeDescription(propType.value)} }`
         }
         default: {
             // any, array, bool, element, func, elementType, node, number,
