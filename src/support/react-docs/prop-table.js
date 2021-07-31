@@ -1,35 +1,7 @@
+const { HyperScript } = require('hyperscript-html')
 const marked = require('marked')
 
-const wrapInHTMLTag = (content, tag) => `<${tag}>${content}</${tag}>`
-const isMultiline = str => /\n/.test(str)
-
-/**
- * Text parsed by `marked` is wrapped in `p` tags by default, which adds
- * substantial height to each table row. `marked.parseInline` omits `p` tags
- * if possible, which will make tables more compact
- * @param {string} markdown
- * @returns {string} HTML generated from markdown
- */
-function parseInlineOrMultiline(markdown) {
-    return isMultiline(markdown)
-        ? marked(markdown)
-        : marked.parseInline(markdown)
-}
-
-/**
- * Takes a string of some code that will be formatted appropriately as a
- * single-line or multi-line code block
- * @param {string} code
- * @returns {string} HTML output
- */
-function formatCodeToHTML(code) {
-    // for formatting consistency with the rest of the page, go to markdown
-    // first, then parse markdown to HTML with the same parser as Docsify
-    const codeMarkdown = isMultiline(code)
-        ? '```js\n' + code + '\n```'
-        : '`' + code + '`'
-    return parseInlineOrMultiline(codeMarkdown)
-}
+const h = HyperScript({ prettyPrint: false })
 
 /**
  * @param {Object} propType A `propType` object from a React Docgen component docs object
@@ -110,53 +82,41 @@ function mapPropEntryToHTMLPropTableRow([name, info]) {
     // Todo: get description from TS type
     // if (tsType) { ... }
 
-    const propName = formatCodeToHTML(name) + (required ? ` <span style="text-decoration: underline dotted rgb(51, 51, 51)" title="Required">*</span>` : '')
+    const propName = h('code', name) + (required ? h('span', {
+        title: 'Required',
+        style: {
+            cursor: 'help',
+            textDecoration: 'underline dotted rgb(51, 51, 51)'
+        }
+    }, '*') : '')
     // todo: needs improving
-    const propType = formatCodeToHTML(getPropTypeDescription(type))
+    const propType = h('code', getPropTypeDescription(type))
     // process prop description as markdown
     const propDescription = description
-        ? parseInlineOrMultiline(description)
+        ? marked(description)
         : ''
-    const propDefault = defaultValue ? formatCodeToHTML(defaultValue.value) : ''
+    const propDefault = defaultValue ? h('code', defaultValue.value) : ''
 
-    const tableCells = [
-        propName,
-        propDescription,
-        propType,
-        propDefault,
-    ]
-        .map(cellContents => wrapInHTMLTag(cellContents, 'td'))
-        .join('')
-
-    return wrapInHTMLTag(tableCells, 'tr')
-}
-
-/**
- * @param {string} rows - `<tr>` elements that will comprise the table body
- * @returns {string} A complete HTML prop table
- */
-function addRowsToPropTableTemplate(rows) {
-    return `<table>
-    <thead>
-        <tr>
-            <th>Property</th>
-            <th>Description</th>
-            <th>Type</th>
-            <th>Default</th>
-        </tr>
-    </thead>
-    <tbody>
-        ${rows}
-    </tbody>
-</table>`
+    const cells = [propName, propDescription, propType, propDefault]
+    return h('tr', cells.map(c => h('td', c)))
 }
 
 function getHTMLPropTable(docgenProps) {
     const propTableRows = Object.entries(docgenProps)
         .sort(([aKey], [bKey]) => aKey.localeCompare(bKey))
         .map(mapPropEntryToHTMLPropTableRow)
-        .join('\n')
-    return addRowsToPropTableTemplate(propTableRows)
+
+    return h('table', [
+        h('thead', [
+            h('tr', [
+                h('th', 'Property'),
+                h('th', 'Description'),
+                h('th', 'Type'),
+                h('th', 'Default'),
+            ])
+        ]),
+        h('tbody', propTableRows)
+    ])
 }
 
 module.exports = getHTMLPropTable
