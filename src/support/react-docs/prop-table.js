@@ -44,7 +44,7 @@ function getPropTypeDescription(propType) {
         case 'custom': {
             // Custom prop types: functions, or defined elsewhere
             // If raw is short and lives on one line, use raw
-            const useRaw = propType.raw.length < 50 && !/\n/.test(propType.raw)
+            const useRaw = propType.raw.length < 20 && !/\n/.test(propType.raw)
             return useRaw ? propType.raw : propType.name
         }
         case 'enum': {
@@ -110,7 +110,7 @@ function mapPropEntryToHTMLPropTableRow([name, info]) {
     // Todo: get description from TS type
     // if (tsType) { ... }
 
-    const propName = formatCodeToHTML(name)
+    const propName = formatCodeToHTML(name) + (required ? ` <span style="text-decoration: underline dotted rgb(51, 51, 51)" title="Required">*</span>` : '')
     // todo: needs improving
     const propType = formatCodeToHTML(getPropTypeDescription(type))
     // process prop description as markdown
@@ -118,14 +118,12 @@ function mapPropEntryToHTMLPropTableRow([name, info]) {
         ? parseInlineOrMultiline(description)
         : ''
     const propDefault = defaultValue ? formatCodeToHTML(defaultValue.value) : ''
-    const propRequired = required || ''
 
     const tableCells = [
         propName,
-        propType,
         propDescription,
+        propType,
         propDefault,
-        propRequired,
     ]
         .map(cellContents => wrapInHTMLTag(cellContents, 'td'))
         .join('')
@@ -141,11 +139,10 @@ function addRowsToPropTableTemplate(rows) {
     return `<table>
     <thead>
         <tr>
-            <th>prop</th>
-            <th>type</th>
-            <th>description</th>
-            <th>default</th>
-            <th>required</th>
+            <th>Property</th>
+            <th>Description</th>
+            <th>Type</th>
+            <th>Default</th>
         </tr>
     </thead>
     <tbody>
