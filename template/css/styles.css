@@ -19,6 +19,7 @@ body {
     -webkit-font-smoothing: antialiased;
     color: #212934;
     font-family: var(--font-family-sans-serif);
+    font-size: 105%;
     margin: 0;
     overflow-x: hidden;
 }
@@ -680,12 +681,15 @@ section.cover blockquote > p > a:hover {
     color: #777;
     font-size: 1rem;
 }
+.markdown-section p {
+    max-width: 40em;
+    line-height: 1.6;
+}
 .markdown-section figure,
 .markdown-section p {
     margin: 1.2em 0;
 }
 .markdown-section ol,
-.markdown-section p,
 .markdown-section ul {
     line-height: 1.6rem;
     word-spacing: 0.05rem;
