@@ -20,15 +20,25 @@
         />
 
         <style>
-         table code {
-             background: none !important;
-         }
-         table p {
-             margin: 0 !important;
-         }
-         table p + p {
-             margin-top: 1em !important;
-         }
+            /* These styles help tables be compact and legible */
+            .markdown-section table p {
+                margin: 0 !important;
+                line-height: normal;
+            }
+            .markdown-section table p + p {
+                margin-top: 1em !important;
+            }
+            .markdown-section table code {
+                background: none !important;
+            }
+            .markdown-section table pre {
+                padding: 0.75rem 1rem;
+                margin: 1rem 0;
+                line-height: 1.5;
+            }
+            .markdown-section table pre > code {
+                padding: 0;
+            }
         </style>
     </head>
 
