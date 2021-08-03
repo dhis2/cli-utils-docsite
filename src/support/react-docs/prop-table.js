@@ -3,6 +3,23 @@ const marked = require('marked')
 
 const h = HyperScript({ prettyPrint: false })
 
+const isMultiline = str => /\n/.test(str)
+
+/**
+ * Takes a string of some code that will be formatted appropriately as a
+ * single-line or multi-line code block
+ * @param {string} code
+ * @returns {string} HTML output
+ */
+function formatCodeToHTML(code) {
+    // for formatting consistency with the rest of the page, go to markdown
+    // first, then parse markdown to HTML with the same parser as Docsify
+    const codeMarkdown = isMultiline(code)
+        ? '```js\n' + code + '\n```'
+        : '`' + code + '`'
+    return marked(codeMarkdown)
+}
+
 /**
  * @param {Object} propType A `propType` object from a React Docgen component docs object
  * @returns {string} a string describing the type of that prop to put in a props table
@@ -16,7 +33,8 @@ function getPropTypeDescription(propType) {
         case 'custom': {
             // Custom prop types: functions, or defined elsewhere
             // If raw is short and lives on one line, use raw
-            const useRaw = propType.raw.length < 20 && !/\n/.test(propType.raw)
+            const useRaw =
+                propType.raw.length < 20 && !isMultiline(propType.raw)
             return useRaw ? propType.raw : propType.name
         }
         case 'enum': {
@@ -82,23 +100,31 @@ function mapPropEntryToHTMLPropTableRow([name, info]) {
     // Todo: get description from TS type
     // if (tsType) { ... }
 
-    const propName = h('code', name) + (required ? h('span', {
-        title: 'Required',
-        style: {
-            cursor: 'help',
-            textDecoration: 'underline dotted rgb(51, 51, 51)'
-        }
-    }, '*') : '')
-    // todo: needs improving
+    const propName =
+        h('code', name) +
+        (required
+            ? h(
+                  'span',
+                  {
+                      title: 'Required',
+                      style: {
+                          cursor: 'help',
+                          textDecoration: 'underline dotted rgb(51, 51, 51)',
+                      },
+                  },
+                  '*'
+              )
+            : '')
     const propType = h('code', getPropTypeDescription(type))
     // process prop description as markdown
-    const propDescription = description
-        ? marked(description)
-        : ''
-    const propDefault = defaultValue ? h('code', defaultValue.value) : ''
+    const propDescription = description ? marked(description) : ''
+    const propDefault = defaultValue ? formatCodeToHTML(defaultValue.value) : ''
 
     const cells = [propName, propDescription, propType, propDefault]
-    return h('tr', cells.map(c => h('td', c)))
+    return h(
+        'tr',
+        cells.map(c => h('td', c))
+    )
 }
 
 function getHTMLPropTable(docgenProps) {
@@ -113,9 +139,9 @@ function getHTMLPropTable(docgenProps) {
                 h('th', 'Description'),
                 h('th', 'Type'),
                 h('th', 'Default'),
-            ])
+            ]),
         ]),
-        h('tbody', propTableRows)
+        h('tbody', propTableRows),
     ])
 }
 
