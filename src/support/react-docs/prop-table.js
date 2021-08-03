@@ -120,7 +120,7 @@ function mapPropEntryToHTMLPropTableRow([name, info]) {
     const propDescription = description ? marked(description) : ''
     const propDefault = defaultValue ? formatCodeToHTML(defaultValue.value) : ''
 
-    const cells = [propName, propDescription, propType, propDefault]
+    const cells = [propName, propType, propDescription, propDefault]
     return h(
         'tr',
         cells.map(c => h('td', c))
@@ -136,8 +136,8 @@ function getHTMLPropTable(docgenProps) {
         h('thead', [
             h('tr', [
                 h('th', 'Property'),
-                h('th', 'Description'),
                 h('th', 'Type'),
+                h('th', 'Description'),
                 h('th', 'Default'),
             ]),
         ]),
