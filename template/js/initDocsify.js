@@ -6,7 +6,6 @@ console.log(generatedPages)
 window.$docsify = {
     name: '{{{name}}}',
     repo: '{{{repo}}}',
-    themeColor: '#2196f3',
 
     basePath: 'markdown',
 

@@ -37,7 +37,8 @@
         "docgen-serve-ui": "./bin/d2-utils-docsite serve ./docs -o dist --reactDocs ../ui/components/**/src --reactDocsOutputFile ui-test.md --debug",
         "docgen-build-playground": "./bin/d2-utils-docsite build ./docs -o dist --reactDocs ../../dhis2-playground/docgen-testing/src --reactDocsOutputFile ui-test.md --debug",
         "docgen-serve-playground": "./bin/d2-utils-docsite serve ./docs -o dist --reactDocs ../../dhis2-playground/docgen-testing/src --reactDocsOutputFile ui-test.md --debug",
-        "lint": "d2-style check"
+        "lint": "d2-style check",
+        "format": "d2-style apply"
     },
     "publishConfig": {
         "access": "public"

@@ -100,21 +100,18 @@ function mapPropEntryToHTMLPropTableRow([name, info]) {
     // Todo: get description from TS type
     // if (tsType) { ... }
 
-    const propName =
-        h('code', name) +
-        (required
+    const propName = h('span.prop-table-name', [
+        name,
+        required
             ? h(
-                  'span',
+                  'span.prop-table-name-required',
                   {
                       title: 'Required',
-                      style: {
-                          cursor: 'help',
-                          textDecoration: 'underline dotted rgb(51, 51, 51)',
-                      },
                   },
                   '*'
               )
-            : '')
+            : null,
+    ])
     const propType = h('code', getPropTypeDescription(type))
     // process prop description as markdown
     const propDescription = description ? marked(description) : ''
