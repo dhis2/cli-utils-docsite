@@ -3,22 +3,32 @@ const { reporter } = require('@dhis2/cli-helpers-engine')
 const fs = require('fs-extra')
 const glob = require('glob')
 const reactDocgen = require('react-docgen')
+const urlJoin = require('url-join')
 const getHTMLPropTable = require('./prop-table')
 
 /*
  * Parses a React Docgen docs object and makes nice-looking markdown.
  * @param {Object} docgenDocs - a docs object that is the result of React Docgen parsing a file
+ * @param {Object} options - { linkSource: boolean, remoteRepoURL: string, localRepoRoot: string }
  * @returns {string} Markdown describing the component that produced the docs object
  */
-function getMarkdownFromDocgen(docgenDocs) {
-    // Component name (with link?) [obj.displayName]
-    // Optional filepath [obj.filepath] - added in rdParseFile() above
-    // Component description [obj.description]
-    // Proptypes [obj.props] - object keyed with prop names (see more below)
-    // Methods? [obj.methods] - functions within the component that use /** @public */
-    // Composes? (link to composed element) [obj.composes]
+function getMarkdownFromDocgen(docgenDocs, options) {
+    const { linkSource, remoteRepoURL, localRepoRoot } = options
+    let sourceURL
+    if (linkSource) {
+        // handles case where script is run in a different dir than repo root
+        const relativeFilepath = path.relative(
+            localRepoRoot,
+            docgenDocs.filepath
+        )
+        sourceURL = urlJoin(remoteRepoURL, relativeFilepath)
+    }
+
     const displayName = `### ${docgenDocs.displayName}`
-    const filepath = `#### ${docgenDocs.filepath}`
+    // filepath [docgenDocs.filepath] - added in rdParseFile()
+    const filepath = linkSource
+        ? `[**${docgenDocs.filepath}**](${sourceURL})`
+        : `**${docgenDocs.filepath}**`
     const composes = docgenDocs.composes
         ? `Composes ${docgenDocs.composes.join(', ')}`
         : null
@@ -77,11 +87,16 @@ async function rdParseFile(filepath) {
  * file in the `dest` directory.
  * @param {string[]} inputGlobs An array of paths/globs to parse for React docs
  * @param {string} outputPath A path, relative to `dest`, where the resulting markdown will be output
+ * @param {Object} options
+ * @param {boolean} options.linkSource - if true, will add links to source files
+ * @param {string} options.remoteRepoUrl - URL base for GitHub source files; should end with '/tree/master'
+ * @param {string} options.localRepoRoot - relative path to the repository locally
  * @returns {Promise}
  */
 function renderReactDocs(
     inputGlobs = ['**/src'],
-    outputPath = './react-api.md'
+    outputPath = './react-api.md',
+    options
 ) {
     const inputGlobsArray = Array.isArray(inputGlobs)
         ? inputGlobs
@@ -107,7 +122,9 @@ function renderReactDocs(
                     matches.map(filepath =>
                         rdParseFile(filepath).then(docgenInfo => {
                             return docgenInfo
-                                ? docgenInfo.map(getMarkdownFromDocgen)
+                                ? docgenInfo.map(info =>
+                                      getMarkdownFromDocgen(info, options)
+                                  )
                                 : null
                         })
                     )
