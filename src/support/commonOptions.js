@@ -15,6 +15,8 @@ module.exports.resolvePath
  * @param {string} jsdocOutputFile=jsdoc.md - The path, relative to `dest`, in which to write the `jsdoc` output
  * @param {string} reactDocs - One or more arrays of paths (or globs) to parse with React Docgen
  * @param {string} reactDocsOutputFile=react-api.md - The path, relative to `dest`, in which to write the React docs output
+ * @param {boolean} reactDocsLinkSource=false - If set, component filepaths in the generated markdown will link to that file on GitHub based on the `repository` field of `package.json`. **NOTE:** If this script is not being run in the root of the repository, use the `localRepoRoot` argument
+ * @param {string} localRepoRoot=. - Relative path to the root of the repository. Required for source code links if this script is not being run in the repo root
  */
 module.exports = {
     dest: {
@@ -61,5 +63,17 @@ module.exports = {
         description:
             'The output path, relative to dest, for the generated React Docgen markdown file',
         default: 'react-api.md',
+    },
+    reactDocsLinkSource: {
+        type: 'boolean',
+        description:
+            'Add links to component source files according to the repository field in package.json',
+        default: 'false',
+    },
+    localRepoRoot: {
+        type: 'string',
+        description:
+            'Relative path to the root of the repository. Required for source code links if this script is not being run in the repo root',
+        default: '.',
     },
 }

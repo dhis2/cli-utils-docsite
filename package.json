@@ -28,15 +28,16 @@
         "live-server": "^1.2.1",
         "marked": "^2.1.3",
         "match-all": "^1.2.5",
-        "react-docgen": "^5.4.0"
+        "react-docgen": "^5.4.0",
+        "url-join": "^4.0.1"
     },
     "scripts": {
         "build": "./bin/d2-utils-docsite build ./docs -o dist --jsdoc src/ --jsdocOutputFile api.md",
         "serve": "./bin/d2-utils-docsite serve ./docs -o dist --jsdoc src/ --jsdocOutputFile api.md",
-        "docgen-test-ui": "./bin/d2-utils-docsite build ./docs -o dist --reactDocs ../ui/components/**/src --reactDocsOutputFile ui-test.md --debug",
-        "docgen-serve-ui": "./bin/d2-utils-docsite serve ./docs -o dist --reactDocs ../ui/components/**/src --reactDocsOutputFile ui-test.md --debug",
-        "docgen-build-playground": "./bin/d2-utils-docsite build ./docs -o dist --reactDocs ../../dhis2-playground/docgen-testing/src --reactDocsOutputFile ui-test.md --debug",
-        "docgen-serve-playground": "./bin/d2-utils-docsite serve ./docs -o dist --reactDocs ../../dhis2-playground/docgen-testing/src --reactDocsOutputFile ui-test.md --debug",
+        "docgen-test-ui": "./bin/d2-utils-docsite build ./docs -o dist --reactDocs ../ui/components/**/src --reactDocsOutputFile ui-test.md --reactDocsLinkSource --localRepoRoot ../ui",
+        "docgen-serve-ui": "./bin/d2-utils-docsite serve ./docs -o dist --reactDocs ../ui/components/**/src --reactDocsOutputFile ui-test.md --reactDocsLinkSource --localRepoRoot ../ui",
+        "docgen-build-playground": "./bin/d2-utils-docsite build ./docs -o dist --reactDocs ../../dhis2-playground/docgen-testing/src --reactDocsOutputFile ui-test.md --reactDocsLinkSource --localRepoRoot ../../dhis2-playground/docgen-testing",
+        "docgen-serve-playground": "./bin/d2-utils-docsite serve ./docs -o dist --reactDocs ../../dhis2-playground/docgen-testing/src --reactDocsOutputFile ui-test.md --reactDocsLinkSource --localRepoRoot ../../dhis2-playground/docgen-testing",
         "lint": "d2-style check",
         "format": "d2-style apply"
     },

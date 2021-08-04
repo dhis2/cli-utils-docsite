@@ -4,6 +4,7 @@ const { installTemplate, walkDir } = require('@dhis2/cli-helpers-template')
 const chokidar = require('chokidar')
 const frontMatter = require('front-matter')
 const fs = require('fs-extra')
+const urlJoin = require('url-join')
 const JSDocEngine = require('../support/jsdoc')
 const { localify } = require('../support/localify')
 const renderReactDocs = require('./react-docs/react-docs')
@@ -105,6 +106,8 @@ module.exports = ({
     jsdocOutputFile,
     reactDocs,
     reactDocsOutputFile,
+    reactDocsLinkSource,
+    localRepoRoot,
 }) => {
     const cache = getCache()
     const markdownDir = path.join(dest, 'markdown')
@@ -114,7 +117,11 @@ module.exports = ({
     const data = loadData({
         dataInput,
         configFile,
-        packageJsonFile: path.join(process.cwd(), 'package.json'),
+        packageJsonFile: path.join(
+            process.cwd(),
+            localRepoRoot,
+            'package.json'
+        ),
     })
 
     data.sourcedir = data.sourcedir
@@ -145,7 +152,17 @@ module.exports = ({
     }
 
     const processReactDocs = async () => {
-        await renderReactDocs(reactDocs, reactDocsOut)
+        if (reactDocsLinkSource && !data.repo) {
+            throw new Error(
+                'Package.json must have a repository field to add source code links'
+            )
+        }
+        const options = {
+            linkSource: reactDocsLinkSource,
+            remoteRepoURL: urlJoin(data.repo, 'tree/master'),
+            localRepoRoot,
+        }
+        await renderReactDocs(reactDocs, reactDocsOut, options)
     }
 
     const processOnDeleted = async p => {
