@@ -5,7 +5,7 @@ const h = HyperScript({ prettyPrint: false })
 
 const isMultiline = str => /\n/.test(str)
 
-/**
+/* (Not JSDoc so it doesn't appear in docsite)
  * Takes a string of some code that will be formatted appropriately as a
  * single-line or multi-line code block
  * @param {string} code
@@ -20,7 +20,7 @@ function formatCodeToHTML(code) {
     return marked(codeMarkdown)
 }
 
-/**
+/*
  * @param {Object} propType A `propType` object from a React Docgen component docs object
  * @returns {string} a string describing the type of that prop to put in a props table
  */
@@ -82,7 +82,7 @@ function getPropTypeDescription(propType) {
 // todo
 // function getTsPropTypeDescription(tsType) {}
 
-/**
+/*
  * @param {Array} propEntry A [key, value] entry of the `props` object of a React Docgen component docs object
  * @returns {string} An HTML props table row that documents the prop
  */

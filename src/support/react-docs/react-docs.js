@@ -5,7 +5,7 @@ const glob = require('glob')
 const reactDocgen = require('react-docgen')
 const getHTMLPropTable = require('./prop-table')
 
-/**
+/*
  * Parses a React Docgen docs object and makes nice-looking markdown.
  * @param {Object} docgenDocs - a docs object that is the result of React Docgen parsing a file
  * @returns {string} Markdown describing the component that produced the docs object
@@ -39,7 +39,7 @@ function getMarkdownFromDocgen(docgenDocs) {
     return componentDocs
 }
 
-/**
+/*
  * Uses React Docgen to parse component APIs from a file.
  * @param {string} filepath - Path to file to parse
  * @returns {Array | undefined} An array of component docs objects or undefined if no components are found
@@ -72,7 +72,7 @@ async function rdParseFile(filepath) {
     }
 }
 
-/**
+/* (Not a JSDoc so it doesnt appear in docsite)
  * Get React docs from files matching input paths/globs and output them to a
  * file in the `dest` directory.
  * @param {string[]} inputGlobs An array of paths/globs to parse for React docs
