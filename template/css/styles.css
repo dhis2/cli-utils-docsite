@@ -356,6 +356,7 @@ body.sticky .sidebar-toggle {
     border: 1px solid rgb(232, 237, 242);
 }
 .markdown-section thead {
+    text-align: left;
     background: #F3F5F7;
 }
 .markdown-section th {
