@@ -25,7 +25,7 @@ function getMarkdownFromDocgen(docgenDocs, options) {
         sourceURL = urlJoin(remoteRepoURL, relativeFilepath)
     }
 
-    const displayName = `### ${docgenDocs.displayName}`
+    const displayName = `## ${docgenDocs.displayName}`
     const filepath = linkSource
         ? `[**${relativeFilepath}**](${sourceURL})`
         : `**${relativeFilepath}**`
