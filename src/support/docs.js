@@ -4,8 +4,10 @@ const { installTemplate, walkDir } = require('@dhis2/cli-helpers-template')
 const chokidar = require('chokidar')
 const frontMatter = require('front-matter')
 const fs = require('fs-extra')
+const urlJoin = require('url-join')
 const JSDocEngine = require('../support/jsdoc')
 const { localify } = require('../support/localify')
+const renderReactDocs = require('./react-docs/react-docs')
 
 const templateDir = path.join(__dirname, '../../template')
 
@@ -102,15 +104,24 @@ module.exports = ({
     changelogFile,
     jsdoc,
     jsdocOutputFile,
+    reactDocs,
+    reactDocsOutputFile,
+    reactDocsLinkSource,
+    localRepoRoot,
 }) => {
     const cache = getCache()
     const markdownDir = path.join(dest, 'markdown')
     const jsdocOut = path.join(markdownDir, jsdocOutputFile)
+    const reactDocsOut = path.join(markdownDir, reactDocsOutputFile)
 
     const data = loadData({
         dataInput,
         configFile,
-        packageJsonFile: path.join(process.cwd(), 'package.json'),
+        packageJsonFile: path.join(
+            process.cwd(),
+            localRepoRoot,
+            'package.json'
+        ),
     })
 
     data.sourcedir = data.sourcedir
@@ -138,6 +149,20 @@ module.exports = ({
     const processJSDoc = async () => {
         const opts = { ...(data.docsite && data.docsite.jsdoc2md) }
         await JSDocEngine.render(jsdoc, jsdocOut, opts)
+    }
+
+    const processReactDocs = async () => {
+        if (reactDocsLinkSource && !data.repo) {
+            throw new Error(
+                'Package.json must have a repository field to add source code links'
+            )
+        }
+        const options = {
+            linkSource: reactDocsLinkSource,
+            remoteRepoURL: urlJoin(data.repo, 'tree/master'),
+            localRepoRoot,
+        }
+        await renderReactDocs(reactDocs, reactDocsOut, options)
     }
 
     const processOnDeleted = async p => {
@@ -177,6 +202,10 @@ module.exports = ({
             if (jsdoc && jsdoc.length) {
                 await processJSDoc()
             }
+
+            if (reactDocs && reactDocs.length) {
+                await processReactDocs()
+            }
         },
 
         watch: () => {
@@ -213,6 +242,21 @@ module.exports = ({
                             chalk.dim(path.relative(process.cwd(), p))
                         )
                         await processJSDoc()
+                    })
+            }
+
+            if (reactDocs && reactDocs.length) {
+                chokidar
+                    .watch(reactDocs, {
+                        ignoreInitial: true,
+                        cwd: process.cwd(),
+                    })
+                    .on('all', async (e, p) => {
+                        reporter.print(
+                            'React docs change detected!',
+                            chalk.dim(path.relative(process.cwd(), p))
+                        )
+                        await processReactDocs()
                     })
             }
 
