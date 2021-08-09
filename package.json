@@ -35,10 +35,6 @@
     "scripts": {
         "build": "./bin/d2-utils-docsite build ./docs -o dist --jsdoc src/ --jsdocOutputFile api.md",
         "serve": "./bin/d2-utils-docsite serve ./docs -o dist --jsdoc src/ --jsdocOutputFile api.md",
-        "docgen-test-ui": "./bin/d2-utils-docsite build ./docs -o dist --reactDocs ../ui/components/**/src/index.js --reactDocsOutputFile ui-test.md --reactDocsLinkSource --localRepoRoot ../ui",
-        "docgen-serve-ui": "./bin/d2-utils-docsite serve ./docs -o dist --reactDocs ../ui/components/**/src/index.js --reactDocsOutputFile ui-test.md --reactDocsLinkSource --localRepoRoot ../ui",
-        "docgen-build-playground": "./bin/d2-utils-docsite build ./docs -o dist --reactDocs ../../dhis2-playground/docgen-testing/src/index.js --reactDocsOutputFile ui-test.md --reactDocsLinkSource --localRepoRoot ../../dhis2-playground/docgen-testing",
-        "docgen-serve-playground": "./bin/d2-utils-docsite serve ./docs -o dist --reactDocs ../../dhis2-playground/docgen-testing/src/index.js --reactDocsOutputFile ui-test.md --reactDocsLinkSource --localRepoRoot ../../dhis2-playground/docgen-testing",
         "lint": "d2-style check",
         "format": "d2-style apply"
     },
