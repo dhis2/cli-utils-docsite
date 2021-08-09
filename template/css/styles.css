@@ -739,6 +739,10 @@ section.cover blockquote > p > a:hover {
     position: relative;
     word-wrap: normal;
 }
+.markdown-section pre code {
+    padding: 0;
+    border: none;
+}
 
 .token.cdata,
 .token.comment,

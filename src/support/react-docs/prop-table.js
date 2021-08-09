@@ -112,7 +112,7 @@ function mapPropEntryToHTMLPropTableRow([name, info]) {
               )
             : null,
     ])
-    const propType = h('code', getPropTypeDescription(type))
+    const propType = h('p', h('code', getPropTypeDescription(type)))
     // process prop description as markdown
     const propDescription = description ? marked(description) : ''
     const propDefault = defaultValue ? formatCodeToHTML(defaultValue.value) : ''
