@@ -1,3 +1,10 @@
+## [3.1.1](https://github.com/dhis2/cli-utils-docsite/compare/v3.1.0...v3.1.1) (2021-08-09)
+
+
+### Bug Fixes
+
+* use <h2> for component names ([e3197af](https://github.com/dhis2/cli-utils-docsite/commit/e3197af31d2e0a8614a92eaf59564dc254cc8b71))
+
 # [3.1.0](https://github.com/dhis2/cli-utils-docsite/compare/v3.0.0...v3.1.0) (2021-08-09)
 
 
