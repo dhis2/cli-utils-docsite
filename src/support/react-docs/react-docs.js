@@ -16,21 +16,19 @@ const getHTMLPropTable = require('./prop-table')
  */
 function getMarkdownFromDocgen(docgenDocs, options) {
     const { linkSource, remoteRepoURL, localRepoRoot } = options
+
+    // filepath [docgenDocs.filepath] - added by filepath handler
+    const relativeFilepath = path.relative(localRepoRoot, docgenDocs.filepath)
     let sourceURL
-    if (linkSource) {
+    if (linkSource && remoteRepoURL) {
         // handles case where script is run in a different dir than repo root
-        const relativeFilepath = path.relative(
-            localRepoRoot,
-            docgenDocs.filepath
-        )
         sourceURL = urlJoin(remoteRepoURL, relativeFilepath)
     }
 
     const displayName = `### ${docgenDocs.displayName}`
-    // filepath [docgenDocs.filepath] - added by filepath handler
     const filepath = linkSource
-        ? `[**${docgenDocs.filepath}**](${sourceURL})`
-        : `**${docgenDocs.filepath}**`
+        ? `[**${relativeFilepath}**](${sourceURL})`
+        : `**${relativeFilepath}**`
     const composes = docgenDocs.composes
         ? `Composes ${docgenDocs.composes.join(', ')}`
         : null
