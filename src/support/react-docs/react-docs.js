@@ -4,6 +4,8 @@ const fs = require('fs-extra')
 const glob = require('glob')
 const reactDocgen = require('react-docgen')
 const urlJoin = require('url-join')
+const findExportedComponentDefinitionsUsingImporter = require('./custom-resolver')
+const filepathHandler = require('./filepath-handler')
 const getHTMLPropTable = require('./prop-table')
 
 /*
@@ -25,7 +27,7 @@ function getMarkdownFromDocgen(docgenDocs, options) {
     }
 
     const displayName = `### ${docgenDocs.displayName}`
-    // filepath [docgenDocs.filepath] - added in rdParseFile()
+    // filepath [docgenDocs.filepath] - added by filepath handler
     const filepath = linkSource
         ? `[**${docgenDocs.filepath}**](${sourceURL})`
         : `**${docgenDocs.filepath}**`
@@ -61,15 +63,28 @@ async function rdParseFile(filepath) {
         return
     }
 
-    const fileData = await fs.readFile(filepath)
-    reporter.debug(`Parsing file ${filepath} with react-docgen`)
+    const absoluteFilepath = path.resolve(process.cwd(), filepath)
+    const fileData = await fs.readFile(absoluteFilepath)
+    reporter.debug(`Parsing file ${absoluteFilepath} with react-docgen`)
 
+    const { parse, defaultHandlers, importers } = reactDocgen
     try {
-        const parsedInfos = reactDocgen.parse(
+        const parsedInfos = parse(
             fileData,
-            reactDocgen.resolver.findAllExportedComponentDefinitions
+            // Resolvers receive an AST and can return component definitions'
+            // NodePaths to be parsed for documentation.
+            // This custom resolver extends a built-in one by supporting more
+            // syntaxes for exported components
+            findExportedComponentDefinitionsUsingImporter,
+            // Handlers receive a component definition's nodepath and can add data
+            // to the component's resulting 'documentation' object.
+            // The custom handler adds a 'filepath' property to the documentation
+            [...defaultHandlers, filepathHandler],
+            // These options enable handling of imported values, including both
+            // imported props and components, by traversing imports
+            { importer: importers.makeFsImporter(), filename: absoluteFilepath }
         )
-        return parsedInfos.map(info => ({ ...info, filepath }))
+        return parsedInfos
     } catch (err) {
         // If a file doesn't have any react components, the parse function
         // throws a 'No suitable component definition found' error, which can
