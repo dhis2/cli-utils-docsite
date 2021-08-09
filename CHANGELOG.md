@@ -1,3 +1,10 @@
+# [3.1.0](https://github.com/dhis2/cli-utils-docsite/compare/v3.0.0...v3.1.0) (2021-08-09)
+
+
+### Features
+
+* add react docgen ([#111](https://github.com/dhis2/cli-utils-docsite/issues/111)) ([99fdc48](https://github.com/dhis2/cli-utils-docsite/commit/99fdc485bd3eebb489c3f52b8d61faa19ab61480))
+
 # [3.0.0](https://github.com/dhis2/cli-utils-docsite/compare/v2.0.3...v3.0.0) (2021-06-14)
 
 
