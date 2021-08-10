@@ -96,6 +96,7 @@ function findExportedComponentDefinitionsUsingImporter(ast, parser, importer) {
     }
 
     visit(ast, {
+        // Skip over these nodes without drilling down
         visitFunctionDeclaration: ignore,
         visitFunctionExpression: ignore,
         visitClassDeclaration: ignore,
@@ -103,18 +104,20 @@ function findExportedComponentDefinitionsUsingImporter(ast, parser, importer) {
         visitIfStatement: ignore,
         visitWithStatement: ignore,
         visitSwitchStatement: ignore,
-        visitCatchCause: ignore,
+        visitCatchClause: ignore,
         visitWhileStatement: ignore,
         visitDoWhileStatement: ignore,
         visitForStatement: ignore,
         visitForInStatement: ignore,
 
+        // Handle ES6 exports
         visitExportDeclaration: exportDeclaration,
         visitExportNamedDeclaration: exportDeclaration,
         visitExportDefaultDeclaration: exportDeclaration,
         // todo: handle ExportAll
         visitExportAllDeclaration: exportDeclaration,
 
+        // Handle module.exports
         visitAssignmentExpression: function (path) {
             // Ignore anything that is not `exports.X = ...;` or
             // `module.exports = ...;`
