@@ -1,3 +1,10 @@
+## [3.1.2](https://github.com/dhis2/cli-utils-docsite/compare/v3.1.1...v3.1.2) (2021-08-10)
+
+
+### Bug Fixes
+
+* add header to react docs ([#120](https://github.com/dhis2/cli-utils-docsite/issues/120)) ([678f6dc](https://github.com/dhis2/cli-utils-docsite/commit/678f6dc24baa1ecf0442387ea7378dd115ded55e))
+
 ## [3.1.1](https://github.com/dhis2/cli-utils-docsite/compare/v3.1.0...v3.1.1) (2021-08-09)
 
 
