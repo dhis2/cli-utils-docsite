@@ -146,11 +146,12 @@ function renderReactDocs(
         })
     ).then(mdData => {
         // mdData now has nested arrays with some undefined entries
-        const markdown = mdData
+        const componentsMarkdown = mdData
             .flat(Infinity)
             .filter(e => !!e)
             .join('\n\n')
-        if (markdown.length) {
+        if (componentsMarkdown.length) {
+            const markdown = `# React API\n\n${componentsMarkdown}`
             return fs.writeFile(outputPath, markdown)
         } else {
             reporter.debug('No react docs found')
