@@ -17,7 +17,7 @@
         "node": ">=12"
     },
     "dependencies": {
-        "@dhis2/cli-helpers-engine": "^3.0.0",
+        "@dhis2/cli-helpers-engine": "^3.1.1",
         "@dhis2/cli-helpers-template": "^3.0.0",
         "ast-types": "^0.14.2",
         "chokidar": "^3.3.1",
