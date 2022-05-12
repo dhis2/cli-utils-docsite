@@ -48,7 +48,7 @@ module.exports = {
     builder: {
         source: {
             type: 'string',
-            coerce: p => path.resolve(p),
+            coerce: (p) => path.resolve(p),
             default: 'docs',
         },
         ...commonOptions,

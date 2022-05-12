@@ -5,7 +5,7 @@ const jsdoc2md = require('jsdoc-to-markdown')
 
 const render = async (source, dest, options) => {
     let files = Array.isArray(source) ? source : [source]
-    files = files.map(f =>
+    files = files.map((f) =>
         fs.statSync(f).isDirectory() ? path.join(f, '/**/*') : f
     )
 

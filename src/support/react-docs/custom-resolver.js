@@ -67,7 +67,7 @@ function findExportedComponentDefinitionsUsingImporter(ast, parser, importer) {
     function exportDeclaration(path) {
         const definitions = resolveExportDeclaration(path, importer)
             // resolve export specifiers the above function missed:
-            .map(path => resolveExportSpecifier(path, importer))
+            .map((path) => resolveExportSpecifier(path, importer))
             .reduce((acc, definition) => {
                 if (isComponentDefinition(definition, importer)) {
                     acc.push(definition)
@@ -82,12 +82,12 @@ function findExportedComponentDefinitionsUsingImporter(ast, parser, importer) {
                 }
                 return acc
             }, [])
-            .map(definition => resolveDefinition(definition, importer))
+            .map((definition) => resolveDefinition(definition, importer))
 
         if (definitions.length === 0) {
             return false
         }
-        definitions.forEach(definition => {
+        definitions.forEach((definition) => {
             if (definition && components.indexOf(definition) === -1) {
                 components.push(definition)
             }

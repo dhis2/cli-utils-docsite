@@ -26,7 +26,7 @@ const processDocFile = async (srcPath, outPath) => {
     }
 }
 
-const parsePackageRepository = repository => {
+const parsePackageRepository = (repository) => {
     let repo
     if (!repository || typeof repository === 'string') {
         repo = repository
@@ -135,10 +135,10 @@ module.exports = ({
             'getting-started',
         jsdoc && jsdoc.length && jsdocOutputFile.replace(/\.md$/, ''),
     ]
-        .filter(x => !!x)
+        .filter((x) => !!x)
         .join(',')
 
-    const processOnChanged = async p => {
+    const processOnChanged = async (p) => {
         const outPath =
             path.relative(process.cwd(), p) === changelogFile
                 ? path.join(markdownDir, path.relative(process.cwd(), p))
@@ -165,7 +165,7 @@ module.exports = ({
         await renderReactDocs(reactDocs, reactDocsOut, options)
     }
 
-    const processOnDeleted = async p => {
+    const processOnDeleted = async (p) => {
         const outPath =
             path.relative(process.cwd(), p) === changelogFile
                 ? path.join(markdownDir, path.relative(process.cwd(), p))
@@ -220,7 +220,7 @@ module.exports = ({
                         chalk.dim(path.relative(process.cwd(), p))
                     )
                 )
-                .on('addDir', p => fs.ensureDirSync(p))
+                .on('addDir', (p) => fs.ensureDirSync(p))
                 .on('add', processOnChanged)
                 .on('change', processOnChanged)
                 .on('unlink', processOnDeleted)
