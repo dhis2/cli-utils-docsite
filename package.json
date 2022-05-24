@@ -22,7 +22,7 @@
         "ast-types": "^0.14.2",
         "chokidar": "^3.3.1",
         "front-matter": "^3.1.0",
-        "fs-extra": "^8.1.0",
+        "fs-extra": "^10.1.0",
         "glob": "^7.1.7",
         "hyperscript-html": "^2.0.0",
         "jsdoc-to-markdown": "^5.0.3",
