@@ -15,7 +15,7 @@ module.exports.localify = async ({ filePath, assetsDir, cache, force }) => {
     const usedNames = {}
 
     await Promise.all(
-        matches.map(async url => {
+        matches.map(async (url) => {
             const basename = path.basename(url)
             if (usedNames[basename] && usedNames[basename] !== url) {
                 reporter.warn(

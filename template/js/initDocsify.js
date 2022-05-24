@@ -29,9 +29,11 @@ window.$docsify = {
         EditOnGithubPlugin.create(
             '{{{repo}}}/blob/master/{{{sourcedir}}}',
             undefined,
-            name => {
+            (name) => {
                 if (
-                    generatedPages.find(page => name.match(`\\/?${page}\\.md`))
+                    generatedPages.find((page) =>
+                        name.match(`\\/?${page}\\.md`)
+                    )
                 ) {
                     return null
                 }

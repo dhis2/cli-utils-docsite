@@ -1,6 +1,6 @@
 const path = require('path')
 
-const resolvePath = p => path.resolve(p)
+const resolvePath = (p) => path.resolve(p)
 module.exports.resolvePath
 
 /**

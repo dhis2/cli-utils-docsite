@@ -3,7 +3,7 @@ const marked = require('marked')
 
 const h = HyperScript({ prettyPrint: false })
 
-const isMultiline = str => /\n/.test(str)
+const isMultiline = (str) => /\n/.test(str)
 
 /* (Not JSDoc so it doesn't appear in docsite)
  * Takes a string of some code that will be formatted appropriately as a
@@ -120,7 +120,7 @@ function mapPropEntryToHTMLPropTableRow([name, info]) {
     const cells = [propName, propType, propDescription, propDefault]
     return h(
         'tr',
-        cells.map(c => h('td', c))
+        cells.map((c) => h('td', c))
     )
 }
 

@@ -44,7 +44,7 @@ function getMarkdownFromDocgen(docgenDocs, options) {
         composes,
         propTable,
     ]
-        .filter(e => !!e)
+        .filter((e) => !!e)
         .join('\n\n')
     return componentDocs
 }
@@ -115,7 +115,7 @@ function renderReactDocs(
         ? inputGlobs
         : [inputGlobs]
     // Some file filtering added in globs here to increase performance
-    const globs = inputGlobsArray.map(inputGlob =>
+    const globs = inputGlobsArray.map((inputGlob) =>
         fs.statSync(inputGlob).isDirectory()
             ? path.join(inputGlob, '/**/!(*.*).{js,jsx,tsx}')
             : inputGlob
@@ -123,19 +123,19 @@ function renderReactDocs(
 
     // Process files in globs in parallel
     return Promise.all(
-        globs.map(thisGlob => {
+        globs.map((thisGlob) => {
             return new Promise((resolve, reject) => {
                 // Get filenames that match glob
                 glob(thisGlob, (err, matches) =>
                     err ? reject(err) : resolve(matches)
                 )
-            }).then(matches => {
+            }).then((matches) => {
                 // Get docgen info in parallel & process into markdown
                 return Promise.all(
-                    matches.map(filepath =>
-                        rdParseFile(filepath).then(docgenInfo => {
+                    matches.map((filepath) =>
+                        rdParseFile(filepath).then((docgenInfo) => {
                             return docgenInfo
-                                ? docgenInfo.map(info =>
+                                ? docgenInfo.map((info) =>
                                       getMarkdownFromDocgen(info, options)
                                   )
                                 : null
@@ -144,11 +144,11 @@ function renderReactDocs(
                 )
             })
         })
-    ).then(mdData => {
+    ).then((mdData) => {
         // mdData now has nested arrays with some undefined entries
         const componentsMarkdown = mdData
             .flat(Infinity)
-            .filter(e => !!e)
+            .filter((e) => !!e)
             .join('\n\n')
         if (componentsMarkdown.length) {
             const markdown = `# React API\n\n${componentsMarkdown}`
