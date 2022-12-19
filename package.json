@@ -42,6 +42,6 @@
         "access": "public"
     },
     "devDependencies": {
-        "@dhis2/cli-style": "^10.4.1"
+        "@dhis2/cli-style": "^10.5.0"
     }
 }
