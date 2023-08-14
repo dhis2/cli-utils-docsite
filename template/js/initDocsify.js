@@ -26,6 +26,14 @@ window.$docsify = {
     },
 
     plugins: [
+        function (hook) {
+            hook.doneEach(function () {
+                // Invoked each time after the data is fully loaded, no arguments,
+                if (document.title !== '{{{name}}}') {
+                    document.title += ' - {{{name}}}'
+                }
+            })
+        },
         EditOnGithubPlugin.create(
             '{{{repo}}}/blob/master/{{{sourcedir}}}',
             undefined,
