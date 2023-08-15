@@ -1,3 +1,10 @@
+# [3.2.0](https://github.com/dhis2/cli-utils-docsite/compare/v3.1.2...v3.2.0) (2023-08-15)
+
+
+### Features
+
+* have both page name and doc-site name in title ([08bba7a](https://github.com/dhis2/cli-utils-docsite/commit/08bba7a75b1c8546a8094cf2db2ecd713c27ee2c))
+
 ## [3.1.2](https://github.com/dhis2/cli-utils-docsite/compare/v3.1.1...v3.1.2) (2021-08-10)
 
 
