@@ -30,7 +30,7 @@
         "marked": "^2.1.3",
         "match-all": "^1.2.5",
         "react-docgen": "^6.0.0-alpha.0",
-        "url-join": "^4.0.1"
+        "url-join": "^5.0.0"
     },
     "scripts": {
         "build": "./bin/d2-utils-docsite build ./docs -o dist --jsdoc src/ --jsdocOutputFile api.md",
